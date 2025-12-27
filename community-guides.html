@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Community Guides Module                            ║
+║  Evacuation routes, shelters, and flood-proofing tips                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Guides | LA Flood Hub</title>
+    <style>
+:root {
+    --primary-700: #1e6091; --primary-600: #2980b9; --primary-500: #3498db;
+    --primary-100: #d6eaf8; --primary-50: #ebf5fb;
+    --danger-500: #e74c3c; --warning-500: #f39c12; --success-500: #27ae60;
+    --neutral-900: #1a1a2e; --neutral-700: #2c3e50; --neutral-600: #34495e;
+    --neutral-400: #85929e; --neutral-200: #d5d8dc; --neutral-100: #eaecee; --neutral-50: #f8f9f9;
+    --bg-primary: var(--neutral-50); --bg-secondary: #ffffff;
+    --text-primary: var(--neutral-900); --text-secondary: var(--neutral-600); --text-muted: var(--neutral-400);
+    --border-color: var(--neutral-200);
+    --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --header-height: 70px; --border-radius: 8px; --border-radius-lg: 12px;
+    --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
+    --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem;
+}
+[data-theme="dark"] { --bg-primary: var(--neutral-900); --bg-secondary: #16213e; --text-primary: var(--neutral-50); --text-secondary: #aab7b8; --border-color: var(--neutral-700); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); line-height: 1.6; color: var(--text-primary); background: var(--bg-primary); }
+
+.header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 var(--space-6); z-index: 100; }
+.back-link { display: flex; align-items: center; gap: var(--space-2); color: var(--primary-600); text-decoration: none; font-weight: 500; }
+.header-title { margin-left: var(--space-6); font-family: var(--font-display); font-size: 1.25rem; }
+
+.main-content { margin-top: var(--header-height); padding: var(--space-8) var(--space-6); max-width: 1000px; margin-left: auto; margin-right: auto; }
+.page-header { text-align: center; margin-bottom: var(--space-12); }
+.page-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: var(--space-4); }
+.page-subtitle { font-size: 1.125rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+
+/* Emergency Banner */
+.emergency-banner { background: var(--danger-500); color: white; padding: var(--space-4); border-radius: var(--border-radius); margin-bottom: var(--space-8); text-align: center; }
+.emergency-banner h3 { margin-bottom: var(--space-2); }
+.emergency-numbers { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-6); margin-top: var(--space-3); }
+.emergency-number { font-size: 1.25rem; font-weight: 700; }
+
+/* Guide Cards */
+.guide-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); margin-bottom: var(--space-6); overflow: hidden; }
+.guide-header { padding: var(--space-5); background: var(--primary-50); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: var(--space-3); }
+.guide-header h2 { font-size: 1.25rem; }
+.guide-body { padding: var(--space-5); }
+.guide-body p { color: var(--text-secondary); margin-bottom: var(--space-4); }
+
+/* Checklist */
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--border-color); }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 20px; height: 20px; border: 2px solid var(--primary-600); border-radius: 4px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.check-box.checked { background: var(--primary-600); }
+.check-box.checked::after { content: "✓"; color: white; font-size: 12px; }
+.check-text { flex-grow: 1; }
+.check-text strong { display: block; color: var(--text-primary); }
+.check-text span { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* Resource Grid */
+.resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+.resource-card { background: var(--neutral-100); border-radius: var(--border-radius); padding: var(--space-4); text-align: center; }
+.resource-icon { font-size: 2rem; margin-bottom: var(--space-2); }
+.resource-title { font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1); }
+.resource-info { font-size: 0.875rem; color: var(--text-secondary); }
+.resource-link { display: inline-block; margin-top: var(--space-2); font-size: 0.8rem; color: var(--primary-600); text-decoration: none; }
+.resource-link:hover { text-decoration: underline; }
+
+/* Shelter Table */
+.shelter-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.shelter-table th, .shelter-table td { padding: var(--space-3); text-align: left; border-bottom: 1px solid var(--border-color); }
+.shelter-table th { background: var(--neutral-100); }
+
+/* Tips Grid */
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); }
+.tip-card { background: var(--neutral-100); border-radius: var(--border-radius); padding: var(--space-4); }
+.tip-card h4 { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); color: var(--text-primary); }
+.tip-card p { font-size: 0.875rem; color: var(--text-secondary); }
+
+.module-footer { margin-top: var(--space-16); padding: var(--space-6); background: var(--neutral-900); color: var(--neutral-400); border-radius: var(--border-radius-lg); font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Hub
+        </a>
+        <h1 class="header-title">Community Guides</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Community Safety Guides</h1>
+            <p class="page-subtitle">
+                Essential information for residents, local agencies, and volunteers including 
+                evacuation routes, shelter locations, and home flood-proofing tips.
+            </p>
+        </div>
+
+        <!-- Emergency Numbers -->
+        <div class="emergency-banner">
+            <h3>Emergency Contacts</h3>
+            <div class="emergency-numbers">
+                <div><span class="emergency-number">911</span><br>Emergencies</div>
+                <div><span class="emergency-number">211</span><br>LA County Services</div>
+                <div><span class="emergency-number">800-611-1911</span><br>SCE Outages</div>
+                <div><span class="emergency-number">626-458-5100</span><br>LA County Public Works</div>
+            </div>
+        </div>
+
+        <!-- Emergency Alerts -->
+        <div class="guide-card">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🔔</span>
+                <h2>Sign Up for Emergency Alerts</h2>
+            </div>
+            <div class="guide-body">
+                <p>Receive real-time warnings for evacuation orders, flash floods, and debris flows:</p>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">📱</div>
+                        <div class="resource-title">NotifyLA</div>
+                        <div class="resource-info">LA City emergency alerts</div>
+                        <a href="https://notifyla.org/" target="_blank" rel="noopener" class="resource-link">Register at notifyla.org →</a>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">📲</div>
+                        <div class="resource-title">AlertLA County</div>
+                        <div class="resource-info">Countywide notifications</div>
+                        <a href="https://lacounty.gov/emergency/alert-la/" target="_blank" rel="noopener" class="resource-link">Register at lacounty.gov →</a>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">🚨</div>
+                        <div class="resource-title">Wireless Emergency Alerts</div>
+                        <div class="resource-info">Automatic for evacuation orders</div>
+                        <div class="resource-info" style="margin-top: 4px;">No signup needed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evacuation Checklist -->
+        <div class="guide-card" id="altadena-evac">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🎒</span>
+                <h2>Evacuation Go-Bag Checklist</h2>
+            </div>
+            <div class="guide-body">
+                <p>Prepare these items in advance. Keep bag near door for quick departure:</p>
+                <ul class="checklist">
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Water & Food</strong><span>1 gallon per person per day (3-day supply), non-perishable snacks</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Medications</strong><span>7-day supply of prescriptions, first aid kit</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Documents</strong><span>ID, insurance papers, birth certificates (copies in waterproof bag)</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Phone & Chargers</strong><span>Battery bank, car charger, emergency radio</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Cash</strong><span>Small bills, ATMs may be down during outages</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Flashlight & Batteries</strong><span>LED flashlight, extra batteries</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Change of Clothes</strong><span>Warm layers, rain jacket, sturdy shoes</span></div>
+                    </li>
+                    <li>
+                        <div class="check-box" onclick="this.classList.toggle('checked')"></div>
+                        <div class="check-text"><strong>Pet Supplies</strong><span>Food, water, carrier, medications, vaccination records</span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Shelter Locations -->
+        <div class="guide-card" id="palisades-shelters">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🏠</span>
+                <h2>Evacuation Shelters</h2>
+            </div>
+            <div class="guide-body">
+                <p>Active shelters during flood emergencies (verify current status via AlertLA):</p>
+                <table class="shelter-table">
+                    <thead>
+                        <tr><th>Location</th><th>Address</th><th>Serves</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SB County Fairgrounds</td>
+                            <td>14800 7th St, Victorville</td>
+                            <td>Wrightwood/Mountain</td>
+                            <td>Pet-friendly</td>
+                        </tr>
+                        <tr>
+                            <td>Pasadena Convention Ctr</td>
+                            <td>300 E Green St, Pasadena</td>
+                            <td>Altadena area</td>
+                            <td>Red Cross operated</td>
+                        </tr>
+                        <tr>
+                            <td>Westwood Recreation Ctr</td>
+                            <td>1350 S Sepulveda Blvd</td>
+                            <td>Palisades area</td>
+                            <td>Call to verify</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: var(--space-4); font-size: 0.875rem;">
+                    <strong>LAHSA Hotel Vouchers:</strong> For unhoused individuals, contact 211 or LAHSA outreach teams.
+                </p>
+            </div>
+        </div>
+
+        <!-- Sandbag Locations -->
+        <div class="guide-card">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🛡️</span>
+                <h2>Sandbag Distribution Sites</h2>
+            </div>
+            <div class="guide-body">
+                <p>Free sandbags available to residents (proof of residency may be required):</p>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">🚒</div>
+                        <div class="resource-title">All LA City Fire Stations</div>
+                        <div class="resource-info">Sand and bags available</div>
+                        <div class="resource-info">Self-fill, bring shovel</div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">🏗️</div>
+                        <div class="resource-title">LA County Public Works</div>
+                        <div class="resource-info">Multiple locations</div>
+                        <a href="https://pw.lacounty.gov/dsg/sandbags/" target="_blank" rel="noopener" class="resource-link">Find nearest site →</a>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">📍</div>
+                        <div class="resource-title">Altadena Site</div>
+                        <div class="resource-info">County works yard</div>
+                        <div class="resource-info">Check availability first</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Flood-Proofing -->
+        <div class="guide-card">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🏡</span>
+                <h2>Home Flood-Proofing Tips</h2>
+            </div>
+            <div class="guide-body">
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>🚪 Door & Window Barriers</h4>
+                        <p>Stack sandbags in pyramid formation (3-2-1) at doorways. Overlap bags like bricks. Don't stack higher than 2 feet without wider base.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🌧️ Clear Gutters & Drains</h4>
+                        <p>Remove leaves and debris from gutters, downspouts, and yard drains. Ensure water flows away from foundation.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>⚡ Protect Electrical</h4>
+                        <p>Move electrical items above potential flood level. Know how to shut off main breaker. Never touch electrical in flooded areas.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🚗 Move Vehicles</h4>
+                        <p>Park cars on higher ground before storm. Never drive through flooded roads—"Turn Around, Don't Drown."</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>📸 Document Property</h4>
+                        <p>Photograph belongings before storm for insurance. Store photos in cloud. Keep insurance policy info accessible.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🔌 Fill Bathtubs</h4>
+                        <p>If water service may be disrupted, fill bathtubs and containers with clean water for drinking and sanitation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Homeless Resources -->
+        <div class="guide-card" id="homeless-resources">
+            <div class="guide-header">
+                <span style="font-size: 1.5rem;">🤝</span>
+                <h2>Resources for Unhoused Individuals</h2>
+            </div>
+            <div class="guide-body">
+                <p>LAHSA and partner agencies provide storm-specific support:</p>
+                <ul style="margin-left: var(--space-6); color: var(--text-secondary);">
+                    <li style="margin-bottom: var(--space-2);"><strong>Outreach Teams:</strong> Deployed 48 hours before storms to warn and offer services</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>Hotel Vouchers:</strong> Activated during severe weather events</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>Winter Shelter Program:</strong> Additional beds available Nov-March</li>
+                    <li style="margin-bottom: var(--space-2);"><strong>Call 211:</strong> 24/7 helpline for shelter referrals</li>
+                </ul>
+                <p style="margin-top: var(--space-4);">
+                    <strong>⚠️ Critical:</strong> Avoid camping near LA River, washes, or underpasses during storms. 
+                    Flash flooding can occur with little warning.
+                </p>
+            </div>
+        </div>
+
+        <footer class="module-footer">
+            <strong style="color: #27ae60;">Zero-Harm Note:</strong> This guide is for informational purposes. 
+            Always follow official evacuation orders. Do not rely solely on this resource during emergencies. 
+            Shelter availability changes—verify via 211 or AlertLA before traveling.
+        </footer>
+    </main>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+</body>
+</html>

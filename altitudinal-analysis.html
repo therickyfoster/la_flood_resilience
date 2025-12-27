@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Altitudinal Analysis Module                        ║
+║  Topographic overlays and altitude-risk correlations                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altitudinal Analysis | LA Flood Hub</title>
+    <style>
+:root {
+    --primary-700: #1e6091;
+    --primary-600: #2980b9;
+    --primary-500: #3498db;
+    --primary-100: #d6eaf8;
+    --primary-50: #ebf5fb;
+    --danger-500: #e74c3c;
+    --warning-500: #f39c12;
+    --success-500: #27ae60;
+    --neutral-900: #1a1a2e;
+    --neutral-700: #2c3e50;
+    --neutral-600: #34495e;
+    --neutral-400: #85929e;
+    --neutral-200: #d5d8dc;
+    --neutral-100: #eaecee;
+    --neutral-50: #f8f9f9;
+    --bg-primary: var(--neutral-50);
+    --bg-secondary: #ffffff;
+    --text-primary: var(--neutral-900);
+    --text-secondary: var(--neutral-600);
+    --text-muted: var(--neutral-400);
+    --border-color: var(--neutral-200);
+    --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --header-height: 70px;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
+    --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem;
+}
+[data-theme="dark"] {
+    --bg-primary: var(--neutral-900);
+    --bg-secondary: #16213e;
+    --text-primary: var(--neutral-50);
+    --text-secondary: #aab7b8;
+    --border-color: var(--neutral-700);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); line-height: 1.6; color: var(--text-primary); background: var(--bg-primary); }
+
+.header {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
+    background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+    display: flex; align-items: center; padding: 0 var(--space-6); z-index: 100;
+}
+.back-link {
+    display: flex; align-items: center; gap: var(--space-2);
+    color: var(--primary-600); text-decoration: none; font-weight: 500;
+}
+.back-link:hover { text-decoration: underline; }
+.header-title { margin-left: var(--space-6); font-family: var(--font-display); font-size: 1.25rem; }
+
+.main-content {
+    margin-top: var(--header-height); padding: var(--space-8) var(--space-6);
+    max-width: 1100px; margin-left: auto; margin-right: auto;
+}
+.page-header { text-align: center; margin-bottom: var(--space-12); }
+.page-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: var(--space-4); }
+.page-subtitle { font-size: 1.125rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+
+/* Altitude Legend */
+.altitude-legend {
+    display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: center;
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg); padding: var(--space-5); margin-bottom: var(--space-8);
+}
+.legend-item { display: flex; align-items: center; gap: var(--space-2); font-size: 0.875rem; }
+.legend-color { width: 24px; height: 12px; border-radius: 2px; }
+.legend-color.critical { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+.legend-color.high { background: linear-gradient(90deg, #d68910, #f39c12); }
+.legend-color.moderate { background: linear-gradient(90deg, #f5b041, #f9e79f); }
+.legend-color.low { background: linear-gradient(90deg, #27ae60, #82e0aa); }
+
+/* Zone Analysis Cards */
+.zone-analysis {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg); margin-bottom: var(--space-6); overflow: hidden;
+}
+.zone-analysis-header {
+    display: flex; align-items: center; gap: var(--space-4);
+    padding: var(--space-5); background: var(--primary-50); border-bottom: 1px solid var(--border-color);
+}
+.zone-analysis-header h2 { font-size: 1.25rem; flex-grow: 1; }
+.altitude-badge {
+    background: var(--primary-600); color: white; padding: var(--space-2) var(--space-4);
+    border-radius: 20px; font-size: 0.875rem; font-weight: 600;
+}
+.zone-analysis-body { padding: var(--space-5); }
+
+/* Altitude Profile Visualization */
+.altitude-profile {
+    background: var(--neutral-100); border-radius: var(--border-radius);
+    padding: var(--space-4); margin-bottom: var(--space-5); position: relative; height: 120px;
+}
+.profile-bar {
+    position: absolute; bottom: 20px; height: 60px; border-radius: 4px 4px 0 0;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px;
+    font-size: 0.7rem; color: white; font-weight: 600;
+}
+.profile-label {
+    position: absolute; bottom: 4px; font-size: 0.65rem; color: var(--text-muted);
+    transform: translateX(-50%);
+}
+
+/* Data Grid */
+.data-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-4); margin-bottom: var(--space-5);
+}
+.data-item { text-align: center; padding: var(--space-3); background: var(--neutral-100); border-radius: var(--border-radius); }
+.data-value { font-size: 1.5rem; font-weight: 700; color: var(--primary-600); }
+.data-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+/* Risk Factors */
+.risk-factors { margin-top: var(--space-4); }
+.risk-factor {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-3) 0; border-bottom: 1px solid var(--border-color);
+}
+.risk-factor:last-child { border-bottom: none; }
+.risk-icon { font-size: 1.25rem; }
+.risk-name { flex-grow: 1; font-weight: 500; }
+.risk-level {
+    padding: var(--space-1) var(--space-3); border-radius: 12px;
+    font-size: 0.75rem; font-weight: 600;
+}
+.risk-level.critical { background: var(--danger-500); color: white; }
+.risk-level.high { background: var(--warning-500); color: white; }
+.risk-level.moderate { background: #f5b041; color: #1a1a2e; }
+.risk-level.low { background: var(--success-500); color: white; }
+
+/* Strategy Summary */
+.strategy-summary {
+    background: var(--primary-50); border-radius: var(--border-radius);
+    padding: var(--space-4); margin-top: var(--space-5);
+}
+.strategy-summary h4 { font-size: 0.875rem; color: var(--primary-700); margin-bottom: var(--space-2); }
+.strategy-list { list-style: none; }
+.strategy-list li {
+    padding: var(--space-2) 0; font-size: 0.875rem; color: var(--text-secondary);
+    display: flex; align-items: flex-start; gap: var(--space-2);
+}
+.strategy-list li::before { content: "→"; color: var(--primary-600); }
+
+/* Links */
+.module-links {
+    display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4);
+}
+.module-link {
+    font-size: 0.8rem; padding: var(--space-2) var(--space-3);
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--border-radius); color: var(--primary-600); text-decoration: none;
+}
+.module-link:hover { background: var(--primary-50); }
+
+/* Footer */
+.module-footer {
+    margin-top: var(--space-16); padding: var(--space-6);
+    background: var(--neutral-900); color: var(--neutral-400); border-radius: var(--border-radius-lg);
+}
+.zero-harm-note { display: flex; align-items: flex-start; gap: var(--space-3); }
+.zero-harm-text { font-size: 0.875rem; line-height: 1.7; }
+
+@media print {
+    .header { display: none; }
+    .main-content { margin-top: 0; }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Hub
+        </a>
+        <h1 class="header-title">Altitudinal Analysis</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Altitudinal Risk Analysis</h1>
+            <p class="page-subtitle">
+                Topographic overlays showing altitude-risk correlations, soil saturation models, 
+                and burn scar proximity mapping for targeted flood mitigation interventions.
+            </p>
+        </div>
+
+        <!-- Altitude Legend -->
+        <div class="altitude-legend">
+            <div class="legend-item">
+                <span class="legend-color critical"></span>
+                <span>Critical Risk (Burn Scar + Steep Slope)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color high"></span>
+                <span>High Risk (Elevated + Saturated)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color moderate"></span>
+                <span>Moderate Risk (Urban Drainage)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color low"></span>
+                <span>Lower Risk (Flat + Permeable)</span>
+            </div>
+        </div>
+
+        <!-- Zone 1: Altadena -->
+        <section class="zone-analysis" id="altadena">
+            <div class="zone-analysis-header">
+                <h2>Altadena / Eaton Burn Scar</h2>
+                <span class="altitude-badge">1,200 - 2,400 ft</span>
+            </div>
+            <div class="zone-analysis-body">
+                <div class="altitude-profile">
+                    <div class="profile-bar" style="left: 10%; width: 15%; height: 80%; background: linear-gradient(180deg, #c0392b, #e74c3c);">2,400'</div>
+                    <div class="profile-bar" style="left: 30%; width: 15%; height: 60%; background: linear-gradient(180deg, #d68910, #f39c12);">1,800'</div>
+                    <div class="profile-bar" style="left: 50%; width: 15%; height: 45%; background: linear-gradient(180deg, #f5b041, #f9e79f);">1,400'</div>
+                    <div class="profile-bar" style="left: 70%; width: 15%; height: 35%; background: linear-gradient(180deg, #27ae60, #82e0aa);">1,200'</div>
+                    <span class="profile-label" style="left: 17.5%;">Burn Scar</span>
+                    <span class="profile-label" style="left: 37.5%;">Upper Slopes</span>
+                    <span class="profile-label" style="left: 57.5%;">Mid Slopes</span>
+                    <span class="profile-label" style="left: 77.5%;">Valley</span>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-value">14,000+</div>
+                        <div class="data-label">Acres Burned (Jan 2025)</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">25-45°</div>
+                        <div class="data-label">Slope Gradient</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">85%</div>
+                        <div class="data-label">Soil Hydrophobicity</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">383+</div>
+                        <div class="data-label">Properties at Risk</div>
+                    </div>
+                </div>
+
+                <div class="risk-factors">
+                    <h4 style="margin-bottom: var(--space-3); color: var(--text-secondary);">Risk Factor Analysis</h4>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🔥</span>
+                        <span class="risk-name">Burn Scar Hydrophobicity</span>
+                        <span class="risk-level critical">Critical</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">⛰️</span>
+                        <span class="risk-name">Steep Slope Gradient</span>
+                        <span class="risk-level critical">Critical</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🏠</span>
+                        <span class="risk-name">Downslope Structure Density</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">💧</span>
+                        <span class="risk-name">Eaton Wash Capacity</span>
+                        <span class="risk-level moderate">Moderate</span>
+                    </div>
+                </div>
+
+                <div class="strategy-summary">
+                    <h4>Recommended Interventions by Altitude</h4>
+                    <ul class="strategy-list">
+                        <li>2,000-2,400 ft: Hillside tarping, straw wattles, silt fencing at burn scar edge</li>
+                        <li>1,500-2,000 ft: K-rail barriers at canyon mouths, debris basin pre-clearing</li>
+                        <li>1,200-1,500 ft: Property-level sandbags, catch basin maintenance, evacuation readiness</li>
+                    </ul>
+                </div>
+
+                <div class="module-links">
+                    <a href="quick-fixes.html" class="module-link">→ Quick-Fix Strategies</a>
+                    <a href="debris-flow-mitigation.html" class="module-link">→ Debris Flow Protocols</a>
+                    <a href="community-guides.html" class="module-link">→ Evacuation Routes</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Zone 2: Pacific Palisades -->
+        <section class="zone-analysis" id="palisades">
+            <div class="zone-analysis-header">
+                <h2>Pacific Palisades Burn Scar</h2>
+                <span class="altitude-badge">0 - 1,500 ft</span>
+            </div>
+            <div class="zone-analysis-body">
+                <div class="altitude-profile">
+                    <div class="profile-bar" style="left: 10%; width: 15%; height: 55%; background: linear-gradient(180deg, #c0392b, #e74c3c);">1,500'</div>
+                    <div class="profile-bar" style="left: 30%; width: 15%; height: 40%; background: linear-gradient(180deg, #d68910, #f39c12);">1,000'</div>
+                    <div class="profile-bar" style="left: 50%; width: 15%; height: 25%; background: linear-gradient(180deg, #f5b041, #f9e79f);">500'</div>
+                    <div class="profile-bar" style="left: 70%; width: 15%; height: 12%; background: linear-gradient(180deg, #3498db, #85c1e9);">Sea Level</div>
+                    <span class="profile-label" style="left: 17.5%;">Burn Scar</span>
+                    <span class="profile-label" style="left: 37.5%;">Mid Canyon</span>
+                    <span class="profile-label" style="left: 57.5%;">Lower</span>
+                    <span class="profile-label" style="left: 77.5%;">Coast</span>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-value">23,000+</div>
+                        <div class="data-label">Acres Burned (Jan 2025)</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">13,000 ft</div>
+                        <div class="data-label">K-Rail Installed</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">18</div>
+                        <div class="data-label">Debris Basins</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">3.6 mi</div>
+                        <div class="data-label">Topanga Closure Zone</div>
+                    </div>
+                </div>
+
+                <div class="risk-factors">
+                    <h4 style="margin-bottom: var(--space-3); color: var(--text-secondary);">Risk Factor Analysis</h4>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🔥</span>
+                        <span class="risk-name">Burn Scar Coverage</span>
+                        <span class="risk-level critical">Critical</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🛣️</span>
+                        <span class="risk-name">Canyon Road Vulnerability</span>
+                        <span class="risk-level critical">Critical</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🌊</span>
+                        <span class="risk-name">Coastal Drainage Capacity</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🏗️</span>
+                        <span class="risk-name">Existing Mitigation (K-Rail)</span>
+                        <span class="risk-level low">Mitigated</span>
+                    </div>
+                </div>
+
+                <div class="strategy-summary">
+                    <h4>Recommended Interventions by Altitude</h4>
+                    <ul class="strategy-list">
+                        <li>1,000-1,500 ft: Slope stabilization, hillside tarping, contour wattles</li>
+                        <li>500-1,000 ft: K-rail reinforcement, debris basin monitoring, road closure protocols</li>
+                        <li>0-500 ft: Catch basin clearing, storm drain maintenance, PCH coordination</li>
+                    </ul>
+                </div>
+
+                <div class="module-links">
+                    <a href="quick-fixes.html" class="module-link">→ Quick-Fix Strategies</a>
+                    <a href="debris-flow-mitigation.html" class="module-link">→ Debris Flow Protocols</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Zone 3: Wrightwood -->
+        <section class="zone-analysis" id="wrightwood">
+            <div class="zone-analysis-header">
+                <h2>Wrightwood / San Gabriel Mountains</h2>
+                <span class="altitude-badge">5,900 - 6,000 ft</span>
+            </div>
+            <div class="zone-analysis-body">
+                <div class="altitude-profile">
+                    <div class="profile-bar" style="left: 10%; width: 20%; height: 95%; background: linear-gradient(180deg, #8e44ad, #9b59b6);">6,000'</div>
+                    <div class="profile-bar" style="left: 35%; width: 20%; height: 85%; background: linear-gradient(180deg, #2980b9, #3498db);">5,500'</div>
+                    <div class="profile-bar" style="left: 60%; width: 20%; height: 60%; background: linear-gradient(180deg, #27ae60, #2ecc71);">4,000'</div>
+                    <span class="profile-label" style="left: 20%;">Wrightwood</span>
+                    <span class="profile-label" style="left: 45%;">Hwy 2</span>
+                    <span class="profile-label" style="left: 70%;">Foothills</span>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-value">6,000 ft</div>
+                        <div class="data-label">Peak Elevation</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">High</div>
+                        <div class="data-label">Flash Flood Intensity</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">1</div>
+                        <div class="data-label">Primary Egress (Hwy 2)</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Dec 2025</div>
+                        <div class="data-label">Rooftop Rescues Required</div>
+                    </div>
+                </div>
+
+                <div class="risk-factors">
+                    <h4 style="margin-bottom: var(--space-3); color: var(--text-secondary);">Risk Factor Analysis</h4>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🏔️</span>
+                        <span class="risk-name">Extreme Elevation Runoff</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🛣️</span>
+                        <span class="risk-name">Single Egress Route</span>
+                        <span class="risk-level critical">Critical</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🚁</span>
+                        <span class="risk-name">Helicopter Access Required</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                </div>
+
+                <div class="module-links">
+                    <a href="quick-fixes.html" class="module-link">→ Quick-Fix Strategies</a>
+                    <a href="shadow-cascades.html" class="module-link">→ Mountain Community Lessons</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Zone 4: Malibu -->
+        <section class="zone-analysis" id="malibu">
+            <div class="zone-analysis-header">
+                <h2>Malibu / Topanga Canyon</h2>
+                <span class="altitude-badge">0 - 2,000 ft</span>
+            </div>
+            <div class="zone-analysis-body">
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-value">2018</div>
+                        <div class="data-label">Woolsey Fire (Legacy)</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">96,949</div>
+                        <div class="data-label">Acres Burned</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Active</div>
+                        <div class="data-label">Vulnerability Maps</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Frequent</div>
+                        <div class="data-label">PCH Closures</div>
+                    </div>
+                </div>
+
+                <div class="risk-factors">
+                    <div class="risk-factor">
+                        <span class="risk-icon">🔥</span>
+                        <span class="risk-name">Legacy Burn Scar (7 years)</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🛣️</span>
+                        <span class="risk-name">Canyon Road Washouts</span>
+                        <span class="risk-level high">High</span>
+                    </div>
+                    <div class="risk-factor">
+                        <span class="risk-icon">🌊</span>
+                        <span class="risk-name">Coastal Storm Surge</span>
+                        <span class="risk-level moderate">Moderate</span>
+                    </div>
+                </div>
+
+                <div class="module-links">
+                    <a href="quick-fixes.html" class="module-link">→ Quick-Fix Strategies</a>
+                    <a href="https://www.malibucity.org/924/Flood-Vulnerability-Maps" class="module-link" target="_blank" rel="noopener">→ Official Malibu Maps ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="module-footer">
+            <div class="zero-harm-note">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <div>
+                    <strong style="color: #27ae60;">Data Sources & Limitations</strong>
+                    <p class="zero-harm-text">
+                        Altitude data derived from USGS DEM and LA County GIS. Risk assessments based on 
+                        Cal OES, USGS debris flow models, and NWS precipitation forecasts. This analysis is 
+                        for planning purposes only. Always follow official evacuation orders and emergency guidance.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+</body>
+</html>

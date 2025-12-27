@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Zero-Harm Principles                               ║
+║  Ethical guidance for safe, consent-first emergency response                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Harm Principles | LA Flood Hub</title>
+    <style>
+:root {
+    --primary-600: #2980b9; --primary-50: #ebf5fb;
+    --success-500: #27ae60; --success-100: #d5f5e3;
+    --neutral-900: #1a1a2e; --neutral-600: #34495e; --neutral-400: #85929e;
+    --neutral-200: #d5d8dc; --neutral-100: #eaecee; --neutral-50: #f8f9f9;
+    --bg-primary: var(--neutral-50); --bg-secondary: #ffffff;
+    --text-primary: var(--neutral-900); --text-secondary: var(--neutral-600);
+    --border-color: var(--neutral-200);
+    --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --header-height: 70px; --border-radius: 8px; --border-radius-lg: 12px;
+    --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
+    --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem;
+}
+[data-theme="dark"] { --bg-primary: var(--neutral-900); --bg-secondary: #16213e; --text-primary: #f8f9f9; --text-secondary: #aab7b8; --border-color: #2c3e50; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); line-height: 1.7; color: var(--text-primary); background: var(--bg-primary); }
+
+.header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 var(--space-6); z-index: 100; }
+.back-link { display: flex; align-items: center; gap: var(--space-2); color: var(--primary-600); text-decoration: none; font-weight: 500; }
+.header-title { margin-left: var(--space-6); font-family: var(--font-display); font-size: 1.25rem; }
+
+.main-content { margin-top: var(--header-height); padding: var(--space-8) var(--space-6); max-width: 800px; margin-left: auto; margin-right: auto; }
+.page-header { text-align: center; margin-bottom: var(--space-12); }
+.page-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: var(--space-4); }
+.page-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+/* Principle Cards */
+.principle { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); }
+.principle h2 { font-size: 1.25rem; color: var(--success-500); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-3); }
+.principle p { color: var(--text-secondary); margin-bottom: var(--space-4); }
+.principle ul { margin-left: var(--space-6); color: var(--text-secondary); }
+.principle li { margin-bottom: var(--space-2); }
+
+/* Highlight Box */
+.highlight-box { background: var(--success-100); border-left: 4px solid var(--success-500); padding: var(--space-5); border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: var(--space-6) 0; }
+.highlight-box h3 { color: var(--success-500); margin-bottom: var(--space-2); }
+
+.module-footer { margin-top: var(--space-16); padding: var(--space-6); background: var(--neutral-900); color: var(--neutral-400); border-radius: var(--border-radius-lg); font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Hub
+        </a>
+        <h1 class="header-title">Zero-Harm Principles</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Zero-Harm Principles</h1>
+            <p class="page-subtitle">
+                Ethical guidance for emergency response that prioritizes safety, consent, and transparency.
+            </p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Core Commitment</h3>
+            <p style="margin: 0;">This application is designed exclusively for public safety, emergency preparedness, and community resilience. It contains no features that could be repurposed for surveillance, enforcement, or coercion.</p>
+        </div>
+
+        <div class="principle">
+            <h2>🛡️ No Surveillance</h2>
+            <p>This application does not collect, transmit, or store any user data externally. There is:</p>
+            <ul>
+                <li>No user tracking or analytics sent to external servers</li>
+                <li>No location data collection beyond what user voluntarily provides</li>
+                <li>No cookies used for tracking purposes</li>
+                <li>No integration with advertising or data broker networks</li>
+                <li>No hidden telemetry or background data transmission</li>
+            </ul>
+        </div>
+
+        <div class="principle">
+            <h2>🔒 Local-Only Data</h2>
+            <p>All user preferences and application state are stored locally on your device using IndexedDB:</p>
+            <ul>
+                <li>Language preferences stored locally</li>
+                <li>Theme settings stored locally</li>
+                <li>HUD metrics stored locally</li>
+                <li>Search history never transmitted</li>
+                <li>User can clear all data at any time via browser settings</li>
+            </ul>
+        </div>
+
+        <div class="principle">
+            <h2>✅ Consent-First Design</h2>
+            <p>Every interaction with this application respects user autonomy:</p>
+            <ul>
+                <li>No auto-play media or forced interactions</li>
+                <li>All external links clearly marked and open in new tabs</li>
+                <li>No pop-ups, modals requiring action, or dark patterns</li>
+                <li>Information provided without requiring registration or identification</li>
+                <li>Offline functionality ensures access without connectivity requirements</li>
+            </ul>
+        </div>
+
+        <div class="principle">
+            <h2>⚙️ Equipment Safety Guidance</h2>
+            <p>Heavy equipment deployment information includes safety protocols:</p>
+            <ul>
+                <li>All equipment guidance includes safety warnings</li>
+                <li>Training requirements clearly stated</li>
+                <li>Professional supervision recommended for all heavy machinery</li>
+                <li>Barrier placement guidance includes "no adverse impact" principles</li>
+                <li>Swift water rescue dangers explicitly communicated</li>
+            </ul>
+        </div>
+
+        <div class="principle">
+            <h2>🌊 Environmental Safeguards</h2>
+            <p>Mitigation strategies respect environmental protection:</p>
+            <ul>
+                <li>Runoff filtration to prevent contamination of waterways</li>
+                <li>Guidance on proper disposal of flood-contaminated materials</li>
+                <li>Vegetation recovery prioritized in long-term planning</li>
+                <li>Ecosystem impacts considered in intervention recommendations</li>
+            </ul>
+        </div>
+
+        <div class="principle">
+            <h2>🤝 Community-Centered Approach</h2>
+            <p>This resource serves all community members equitably:</p>
+            <ul>
+                <li>Multi-language support (20+ languages) for accessibility</li>
+                <li>Resources for unhoused individuals prominently featured</li>
+                <li>No gatekeeping of emergency information</li>
+                <li>Open-source code for community review and contribution</li>
+                <li>Information verified against official sources</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Report Concerns</h3>
+            <p style="margin: 0;">If you identify any feature of this application that could be misused for harm, surveillance, or coercion, please report it. This project is committed to continuous improvement in alignment with zero-harm principles.</p>
+        </div>
+
+        <footer class="module-footer">
+            <strong style="color: #27ae60;">License:</strong> This documentation and the LA Flood Resilience Hub 
+            are released under the MIT License. You are free to use, modify, and distribute this work 
+            with attribution. No warranty is provided.
+        </footer>
+    </main>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+</body>
+</html>

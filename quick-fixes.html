@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Quick-Fix Strategies Module                        ║
+║  Rapid Civic & Heavy Equipment Interventions by Zone                          ║
+║                                                                               ║
+║  ZERO-HARM: Equipment guidance includes safety protocols. No surveillance.    ║
+║  ANTI-INVERSION: All data stored locally. No external telemetry.              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick-Fix Strategies | LA Flood Hub</title>
+    <style>
+:root {
+    --primary-700: #1e6091;
+    --primary-600: #2980b9;
+    --primary-500: #3498db;
+    --primary-100: #d6eaf8;
+    --primary-50: #ebf5fb;
+    --danger-500: #e74c3c;
+    --warning-500: #f39c12;
+    --success-500: #27ae60;
+    --neutral-900: #1a1a2e;
+    --neutral-700: #2c3e50;
+    --neutral-600: #34495e;
+    --neutral-400: #85929e;
+    --neutral-200: #d5d8dc;
+    --neutral-100: #eaecee;
+    --neutral-50: #f8f9f9;
+    --bg-primary: var(--neutral-50);
+    --bg-secondary: #ffffff;
+    --text-primary: var(--neutral-900);
+    --text-secondary: var(--neutral-600);
+    --text-muted: var(--neutral-400);
+    --border-color: var(--neutral-200);
+    --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --header-height: 70px;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+}
+
+[data-theme="dark"] {
+    --bg-primary: var(--neutral-900);
+    --bg-secondary: #16213e;
+    --text-primary: var(--neutral-50);
+    --text-secondary: #aab7b8;
+    --border-color: var(--neutral-700);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-6);
+    z-index: 100;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--primary-600);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover { text-decoration: underline; }
+
+.header-title {
+    margin-left: var(--space-6);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+.main-content {
+    margin-top: var(--header-height);
+    padding: var(--space-8) var(--space-6);
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+}
+
+.page-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Mini HUD */
+.mini-hud {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.hud-item {
+    text-align: center;
+}
+
+.hud-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-600);
+}
+
+.hud-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hud-bar {
+    height: 6px;
+    background: var(--neutral-200);
+    border-radius: 3px;
+    margin-top: var(--space-2);
+    overflow: hidden;
+}
+
+.hud-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+}
+
+/* Zone Sections */
+.zone-section {
+    margin-bottom: var(--space-8);
+}
+
+.zone-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    cursor: pointer;
+}
+
+.zone-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.zone-indicator.critical { background: var(--danger-500); }
+.zone-indicator.high { background: var(--warning-500); }
+.zone-indicator.moderate { background: #f5b041; }
+
+.zone-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex-grow: 1;
+}
+
+.zone-toggle {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.zone-section.open .zone-toggle {
+    transform: rotate(180deg);
+}
+
+.zone-content {
+    display: none;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    background: var(--bg-secondary);
+}
+
+.zone-section.open .zone-content {
+    display: block;
+}
+
+.zone-body {
+    padding: var(--space-5);
+}
+
+/* Intervention Cards */
+.intervention-grid {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.intervention-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.intervention-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--primary-50);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.intervention-icon {
+    font-size: 1.5rem;
+}
+
+.intervention-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.intervention-priority {
+    margin-left: auto;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.intervention-priority.immediate { background: var(--danger-500); color: white; }
+.intervention-priority.high { background: var(--warning-500); color: white; }
+.intervention-priority.standard { background: var(--success-500); color: white; }
+
+.intervention-body {
+    padding: var(--space-4);
+}
+
+.intervention-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+}
+
+.intervention-checklist {
+    list-style: none;
+    margin-bottom: var(--space-4);
+}
+
+.intervention-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.intervention-checklist li::before {
+    content: "☐";
+    color: var(--primary-600);
+    flex-shrink: 0;
+}
+
+.intervention-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.intervention-link {
+    font-size: 0.75rem;
+    padding: var(--space-2) var(--space-3);
+    background: var(--neutral-100);
+    border-radius: var(--border-radius);
+    color: var(--primary-600);
+    text-decoration: none;
+}
+
+.intervention-link:hover {
+    background: var(--primary-100);
+}
+
+/* Cross-references */
+.cross-ref {
+    margin-top: var(--space-6);
+    padding: var(--space-4);
+    background: var(--neutral-100);
+    border-radius: var(--border-radius);
+}
+
+.cross-ref-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.cross-ref-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.cross-ref-link {
+    font-size: 0.8rem;
+    color: var(--primary-600);
+    text-decoration: none;
+}
+
+.cross-ref-link:hover { text-decoration: underline; }
+
+/* Impact Score */
+.impact-score {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--success-500);
+    color: white;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+/* Footer */
+.module-footer {
+    margin-top: var(--space-16);
+    padding: var(--space-6);
+    background: var(--neutral-900);
+    color: var(--neutral-400);
+    border-radius: var(--border-radius-lg);
+}
+
+.zero-harm-note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.zero-harm-icon {
+    color: var(--success-500);
+    flex-shrink: 0;
+}
+
+.zero-harm-text {
+    font-size: 0.875rem;
+    line-height: 1.7;
+}
+
+@media print {
+    .header, .mini-hud { display: none; }
+    .main-content { margin-top: 0; }
+    .zone-content { display: block !important; }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Hub
+        </a>
+        <h1 class="header-title">Quick-Fix Strategies</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Rapid Intervention Strategies</h1>
+            <p class="page-subtitle">
+                Civic and heavy equipment interventions organized by high-risk zone. 
+                Each strategy includes deployment checklists, equipment links, and impact assessments.
+            </p>
+        </div>
+
+        <!-- Mini HUD -->
+        <div class="mini-hud">
+            <div class="hud-item">
+                <div class="hud-value">6</div>
+                <div class="hud-label">Active Zones</div>
+                <div class="hud-bar"><div class="hud-fill" style="width: 100%"></div></div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-value">78%</div>
+                <div class="hud-label">Coverage</div>
+                <div class="hud-bar"><div class="hud-fill" style="width: 78%"></div></div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-value">24</div>
+                <div class="hud-label">Interventions Listed</div>
+                <div class="hud-bar"><div class="hud-fill" style="width: 80%"></div></div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-value">82%</div>
+                <div class="hud-label">Avg Impact Score</div>
+                <div class="hud-bar"><div class="hud-fill" style="width: 82%"></div></div>
+            </div>
+        </div>
+
+        <!-- Zone 1: Altadena / Eaton Burn Scar -->
+        <div class="zone-section open">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator critical"></span>
+                <span class="zone-name">Altadena / Eaton Burn Scar</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 1,200-2,400 ft | <strong>Risk:</strong> Critical | 
+                        <strong>Active Orders:</strong> 383+ properties
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚧</span>
+                                <span class="intervention-title">K-Rail Barrier Deployment</span>
+                                <span class="intervention-priority immediate">Immediate</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Concrete Jersey barriers to divert debris flows away from structures. 
+                                    Prioritize downslope properties at canyon mouths.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Survey debris flow channels from burn scar</li>
+                                    <li>Position K-rails perpendicular to expected flow direction</li>
+                                    <li>Ensure minimum 100ft continuous barrier per critical structure</li>
+                                    <li>Anchor with sandbags at connection points</li>
+                                    <li>Leave drainage gaps to prevent pooling</li>
+                                </ul>
+                                <div class="intervention-links">
+                                    <a href="docs/zero_harm_note.html" class="intervention-link">Safety Guidelines</a>
+                                    <a href="debris-flow-mitigation.html" class="intervention-link">Debris Flow Protocols</a>
+                                    <a href="https://www.caloes.ca.gov/" target="_blank" rel="noopener" class="intervention-link">Cal OES Website ↗</a>
+                                </div>
+                                <div class="impact-score">Impact Score: 92%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🎪</span>
+                                <span class="intervention-title">Hillside Tarp Coverage</span>
+                                <span class="intervention-priority immediate">Immediate</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Plastic sheeting over exposed burn scar soil to reduce erosion and runoff velocity.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Identify steepest exposed slopes above structures</li>
+                                    <li>Deploy 20ft x 100ft plastic sheets</li>
+                                    <li>Secure with wood stakes (17,790 available from DWR)</li>
+                                    <li>Overlap sheets by minimum 2ft</li>
+                                    <li>Direct runoff to designated drainage channels</li>
+                                </ul>
+                                <div class="intervention-links">
+                                    <a href="docs/zero_harm_note.html" class="intervention-link">Installation Safety</a>
+                                    <a href="altitudinal-analysis.html#altadena" class="intervention-link">Slope Analysis</a>
+                                </div>
+                                <div class="impact-score">Impact Score: 78%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚜</span>
+                                <span class="intervention-title">Debris Basin Pre-Storm Clearing</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Heavy equipment clearing of debris basins to maximize capture capacity before storms.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Assess current fill level of Eaton Wash basins</li>
+                                    <li>Deploy dozers and excavators for material removal</li>
+                                    <li>Transport debris to approved disposal sites</li>
+                                    <li>Verify outlet structures are clear</li>
+                                    <li>Install capacity monitoring markers</li>
+                                </ul>
+                                <div class="intervention-links">
+                                    <a href="debris-flow-mitigation.html#basin-monitoring" class="intervention-link">Basin Locations</a>
+                                    <a href="docs/zero_harm_note.html" class="intervention-link">Equipment Safety</a>
+                                </div>
+                                <div class="impact-score">Impact Score: 95%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🌾</span>
+                                <span class="intervention-title">Straw Wattle Installation</span>
+                                <span class="intervention-priority standard">Standard</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Erosion control tubes placed along contours to slow runoff and filter sediment.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Position wattles perpendicular to slope</li>
+                                    <li>Space 15-25ft apart depending on slope angle</li>
+                                    <li>Stake securely at 3ft intervals</li>
+                                    <li>Turn ends upslope to prevent end-around flow</li>
+                                    <li>Coordinate with CCC crews (400+ available)</li>
+                                </ul>
+                                <div class="intervention-links">
+                                    <a href="debris-flow-mitigation.html" class="intervention-link">Erosion Control Guide</a>
+                                    <a href="https://ccc.ca.gov/" target="_blank" rel="noopener" class="intervention-link">CCC Website ↗</a>
+                                </div>
+                                <div class="impact-score">Impact Score: 71%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="altitudinal-analysis.html#altadena" class="cross-ref-link">→ Altitudinal Analysis</a>
+                            <a href="debris-flow-mitigation.html" class="cross-ref-link">→ Debris Flow Protocols</a>
+                            <a href="community-guides.html#altadena-evac" class="cross-ref-link">→ Evacuation Routes</a>
+                            <a href="index.html#data" class="cross-ref-link">→ Historical Flood Data</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 2: Pacific Palisades -->
+        <div class="zone-section">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator critical"></span>
+                <span class="zone-name">Pacific Palisades Burn Scar</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 0-1,500 ft | <strong>Risk:</strong> Critical | 
+                        <strong>K-Rail Installed:</strong> 13,000+ ft
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🧱</span>
+                                <span class="intervention-title">Muscle Wall Reinforcement</span>
+                                <span class="intervention-priority immediate">Immediate</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Interlocking concrete blocks to supplement existing K-rail barriers in high-impact areas.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Identify gaps in existing K-rail coverage</li>
+                                    <li>Deploy muscle walls at canyon outlet points</li>
+                                    <li>Stack 2-3 courses for increased height</li>
+                                    <li>Fill interlock gaps with sandbags</li>
+                                    <li>Mark overflow routes for rescue access</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 89%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🧹</span>
+                                <span class="intervention-title">Catch Basin Clearing</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Storm drain inlet maintenance to prevent street flooding from debris accumulation.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Map all catch basin inlets in burn scar drainage path</li>
+                                    <li>Remove debris, leaves, and sediment</li>
+                                    <li>Install temporary debris screens</li>
+                                    <li>Mark cleared basins for monitoring crews</li>
+                                    <li>Schedule post-storm re-clearing</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 76%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚗</span>
+                                <span class="intervention-title">Topanga Canyon Closure Protocol</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Pre-positioned road closure resources for rapid canyon road shutdown during debris flow warnings.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Pre-stage closure equipment at Grand View Dr and PCH</li>
+                                    <li>Coordinate with Caltrans for 3.6-mile closure activation</li>
+                                    <li>Deploy electronic message boards 48 hours before storm</li>
+                                    <li>Position tow trucks at closure points</li>
+                                    <li>Establish alternative route signage</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 85%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="altitudinal-analysis.html#palisades" class="cross-ref-link">→ Altitudinal Analysis</a>
+                            <a href="debris-flow-mitigation.html#basin-monitoring" class="cross-ref-link">→ Basin Monitoring</a>
+                            <a href="community-guides.html#palisades-shelters" class="cross-ref-link">→ Shelter Locations</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 3: Wrightwood -->
+        <div class="zone-section">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator high"></span>
+                <span class="zone-name">Wrightwood / San Gabriel Mountains</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 5,900-6,000 ft | <strong>Risk:</strong> High | 
+                        <strong>Primary Route:</strong> Highway 2
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">📦</span>
+                                <span class="intervention-title">Super Sack Barrier Deployment</span>
+                                <span class="intervention-priority immediate">Immediate</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Large FIBC bags for rapid barrier construction in mountain community. Each replaces ~750 sandbags.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Transport super sacks via Highway 2 before road closures</li>
+                                    <li>Position at upstream community entry points</li>
+                                    <li>Fill with local material using loaders</li>
+                                    <li>Chain multiple bags for continuous barrier</li>
+                                    <li>Document placement for post-storm recovery</li>
+                                </ul>
+                                <div class="intervention-links">
+                                    <a href="index.html#equipment" class="intervention-link">Equipment Overview</a>
+                                    <a href="https://water.ca.gov/" target="_blank" rel="noopener" class="intervention-link">DWR Website ↗</a>
+                                </div>
+                                <div class="impact-score">Impact Score: 88%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚁</span>
+                                <span class="intervention-title">Pre-Positioned Helicopter Assets</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Rescue helicopters staged for rooftop evacuations when ground access becomes impossible.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Coordinate 3 helicopters with CA National Guard</li>
+                                    <li>Establish staging area at lower elevation</li>
+                                    <li>Pre-identify rooftop landing zones</li>
+                                    <li>Brief pilots on mountain terrain hazards</li>
+                                    <li>Establish communication with isolated residents</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 94%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🛡️</span>
+                                <span class="intervention-title">Property-Level Sandbag Distribution</span>
+                                <span class="intervention-priority standard">Standard</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Direct distribution of filled sandbags to mountain residents for doorway and garage protection.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Set up distribution point at community center</li>
+                                    <li>Pre-fill sandbags using volunteer crews</li>
+                                    <li>Provide placement instruction sheets</li>
+                                    <li>Limit to 25 bags per household initially</li>
+                                    <li>Track distribution for resupply planning</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 65%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="altitudinal-analysis.html#wrightwood" class="cross-ref-link">→ Mountain Altitude Analysis</a>
+                            <a href="shadow-cascades.html#mountain-communities" class="cross-ref-link">→ Global Mountain Interventions</a>
+                            <a href="community-guides.html#wrightwood-shelter" class="cross-ref-link">→ SB County Fairgrounds Shelter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 4: Malibu -->
+        <div class="zone-section">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator high"></span>
+                <span class="zone-name">Malibu / Topanga Canyon</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 0-2,000 ft | <strong>Risk:</strong> High | 
+                        <strong>Legacy Scars:</strong> Woolsey Fire (2018)
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🌊</span>
+                                <span class="intervention-title">Water-Filled Barrier Systems</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    WIPP tubes (up to 150ft) filled with local water sources for rapid perimeter protection.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Identify water sources for filling (pools, hydrants)</li>
+                                    <li>Deploy tubes around critical structures</li>
+                                    <li>Connect multiple tubes for extended barriers</li>
+                                    <li>Anchor to ground with stakes</li>
+                                    <li>Monitor for leaks during storm</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 79%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🧦</span>
+                                <span class="intervention-title">Compost Sock Filtration Lines</span>
+                                <span class="intervention-priority standard">Standard</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Filter contaminants from burn scar runoff before reaching waterways and ocean.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Install at base of slopes above drainage</li>
+                                    <li>Position at storm drain inlet points</li>
+                                    <li>Coordinate with CCC watershed crews</li>
+                                    <li>Document installation for NPDES compliance</li>
+                                    <li>Schedule post-storm replacement</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 68%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="altitudinal-analysis.html#malibu" class="cross-ref-link">→ Coastal Altitude Analysis</a>
+                            <a href="debris-flow-mitigation.html#woolsey-legacy" class="cross-ref-link">→ Woolsey Fire Legacy Protocols</a>
+                            <a href="https://www.malibucity.org/924/Flood-Vulnerability-Maps" class="cross-ref-link">→ Malibu Flood Maps (Official)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 5: LA River -->
+        <div class="zone-section">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator moderate"></span>
+                <span class="zone-name">LA River Corridor</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 100-400 ft | <strong>Risk:</strong> Moderate | 
+                        <strong>Primary Concern:</strong> Swift Water Rescue
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚤</span>
+                                <span class="intervention-title">Swift Water Rescue Staging</span>
+                                <span class="intervention-priority immediate">Immediate</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Pre-position swift water teams along LA River access points for rapid rescue response.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Stage 10 teams (16 members each) at river access</li>
+                                    <li>Pre-position rescue boats at key locations</li>
+                                    <li>Establish communication with homeless outreach</li>
+                                    <li>Brief teams on tunnel/culvert locations</li>
+                                    <li>Coordinate with LAPD for access control</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 96%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">⚠️</span>
+                                <span class="intervention-title">Homeless Population Outreach</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    LAHSA-coordinated outreach to inform unhoused individuals near waterways and provide hotel vouchers.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Deploy outreach teams 48 hours before storm</li>
+                                    <li>Distribute weather and safety information</li>
+                                    <li>Activate hotel voucher program</li>
+                                    <li>Provide supplies and shelter referrals</li>
+                                    <li>Map encampment locations for rescue crews</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 87%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="community-guides.html#homeless-resources" class="cross-ref-link">→ Homeless Resources</a>
+                            <a href="shadow-cascades.html#urban-rivers" class="cross-ref-link">→ Urban River Interventions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 6: Freeway Corridor -->
+        <div class="zone-section">
+            <div class="zone-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="zone-indicator moderate"></span>
+                <span class="zone-name">I-5 / I-210 Freeway Corridor</span>
+                <svg class="zone-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="zone-content">
+                <div class="zone-body">
+                    <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">
+                        <strong>Altitude:</strong> 500-1,500 ft | <strong>Risk:</strong> Moderate | 
+                        <strong>Primary Concern:</strong> Urban Road Flooding
+                    </p>
+
+                    <div class="intervention-grid">
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">🚛</span>
+                                <span class="intervention-title">Caltrans Flood Patrol Deployment</span>
+                                <span class="intervention-priority high">High</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    Mobile crews patrolling flood-prone freeway segments for rapid response and closure.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Pre-position patrol units at known flooding points</li>
+                                    <li>Stock tow trucks for stranded vehicle removal</li>
+                                    <li>Coordinate with CHP for traffic management</li>
+                                    <li>Deploy portable pumps at underpasses</li>
+                                    <li>Activate electronic message boards</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 81%</div>
+                            </div>
+                        </div>
+
+                        <div class="intervention-card">
+                            <div class="intervention-header">
+                                <span class="intervention-icon">💧</span>
+                                <span class="intervention-title">Underpass Pump Pre-Staging</span>
+                                <span class="intervention-priority standard">Standard</span>
+                            </div>
+                            <div class="intervention-body">
+                                <p class="intervention-desc">
+                                    High-capacity dewatering pumps at freeway underpasses prone to rapid flooding.
+                                </p>
+                                <ul class="intervention-checklist">
+                                    <li>Identify lowest elevation underpass points</li>
+                                    <li>Deploy Sea Sponge or equivalent pumps</li>
+                                    <li>Ensure power supply (generators if needed)</li>
+                                    <li>Direct discharge to storm drains</li>
+                                    <li>Assign monitoring personnel</li>
+                                </ul>
+                                <div class="impact-score">Impact Score: 74%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cross-ref">
+                        <div class="cross-ref-title">Cross-References</div>
+                        <div class="cross-ref-links">
+                            <a href="index.html#data" class="cross-ref-link">→ Historical Freeway Flooding Data</a>
+                            <a href="community-guides.html#travel-alerts" class="cross-ref-link">→ Travel Advisory Resources</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="module-footer">
+            <div class="zero-harm-note">
+                <svg class="zero-harm-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <div>
+                    <strong style="color: #27ae60;">Zero-Harm & Safety Note</strong>
+                    <p class="zero-harm-text">
+                        All equipment deployment strategies include safety protocols. Heavy machinery operation 
+                        requires trained personnel and proper supervision. Barrier placement should not redirect 
+                        water onto neighboring properties without coordination. Swift water rescue is extremely 
+                        dangerous—only trained teams should enter flowing water. This guide is for planning purposes; 
+                        always defer to on-site emergency management during active events.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Simple offline IndexedDB check
+        if ('indexedDB' in window) {
+            console.log('IndexedDB available for offline storage');
+        }
+        
+        // Theme persistence
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+</body>
+</html>

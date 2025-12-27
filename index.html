@@ -1,0 +1,3321 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Main Dashboard                                     ║
+║  Version: 1.0.0 | License: MIT | Offline-First Architecture                   ║
+║                                                                               ║
+║  ZERO-HARM COMMITMENT: This tool is designed exclusively for public safety,   ║
+║  emergency preparedness, and community resilience. It contains no tracking,   ║
+║  no external telemetry, and no features that could be repurposed for harm.    ║
+║                                                                               ║
+║  ANTI-INVERSION SAFEGUARD: All data flows are transparent, user-controlled,   ║
+║  and stored locally. No information leaves your device without explicit       ║
+║  consent. Analytics are optional, local-only, and user-resettable.            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Los Angeles Flood Resilience Hub - Rapid flood mitigation knowledge base with altitudinal mapping, equipment strategies, and community guidance">
+    <meta name="keywords" content="LA flood, debris flow, emergency preparedness, Los Angeles, flood mitigation">
+    <title>LA Flood Resilience Hub</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+/* ============================================================================
+   CSS VARIABLES & THEME SYSTEM
+   Purpose: Centralized theming for consistent visual identity
+   Extend: Add new color variables here for theme customization
+   Expected: Seamless light/dark mode switching
+============================================================================ */
+:root {
+    /* Primary Palette - Earth/Water Tones */
+    --primary-900: #0c2d48;
+    --primary-800: #145374;
+    --primary-700: #1e6091;
+    --primary-600: #2980b9;
+    --primary-500: #3498db;
+    --primary-400: #5dade2;
+    --primary-300: #85c1e9;
+    --primary-200: #aed6f1;
+    --primary-100: #d6eaf8;
+    --primary-50: #ebf5fb;
+    
+    /* Alert/Warning Palette */
+    --danger-600: #c0392b;
+    --danger-500: #e74c3c;
+    --danger-400: #ec7063;
+    --warning-600: #d68910;
+    --warning-500: #f39c12;
+    --warning-400: #f5b041;
+    --success-600: #1e8449;
+    --success-500: #27ae60;
+    --success-400: #52be80;
+    
+    /* Neutral Palette */
+    --neutral-900: #1a1a2e;
+    --neutral-800: #16213e;
+    --neutral-700: #2c3e50;
+    --neutral-600: #34495e;
+    --neutral-500: #5d6d7e;
+    --neutral-400: #85929e;
+    --neutral-300: #aab7b8;
+    --neutral-200: #d5d8dc;
+    --neutral-100: #eaecee;
+    --neutral-50: #f8f9f9;
+    
+    /* Semantic Colors */
+    --bg-primary: var(--neutral-50);
+    --bg-secondary: #ffffff;
+    --bg-tertiary: var(--neutral-100);
+    --text-primary: var(--neutral-900);
+    --text-secondary: var(--neutral-600);
+    --text-muted: var(--neutral-400);
+    --border-color: var(--neutral-200);
+    --shadow-color: rgba(0,0,0,0.1);
+    
+    /* Typography Scale */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Fira Code', 'Courier New', monospace;
+    
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    
+    /* Spacing Scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    
+    /* Animation */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 400ms ease;
+    
+    /* Layout */
+    --header-height: 70px;
+    --sidebar-width: 280px;
+    --max-content-width: 1200px;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+}
+
+/* Dark Theme Override */
+[data-theme="dark"] {
+    --bg-primary: var(--neutral-900);
+    --bg-secondary: var(--neutral-800);
+    --bg-tertiary: var(--neutral-700);
+    --text-primary: var(--neutral-50);
+    --text-secondary: var(--neutral-300);
+    --text-muted: var(--neutral-400);
+    --border-color: var(--neutral-700);
+    --shadow-color: rgba(0,0,0,0.3);
+}
+
+/* ============================================================================
+   RESET & BASE STYLES
+   Purpose: Normalize browser defaults
+   Extend: Add element-specific resets as needed
+============================================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================================
+   SPLASH SCREEN
+   Purpose: Animated loading experience with progress indicator
+   Extend: Modify animation keyframes for different effects
+   Expected: Fades out after initialization complete
+============================================================================ */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 50%, var(--primary-500) 100%);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--space-8);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.splash-logo svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 20px rgba(255,255,255,0.3));
+}
+
+.splash-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: white;
+    text-align: center;
+    margin-bottom: var(--space-4);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.splash-subtitle {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.8);
+    margin-bottom: var(--space-8);
+}
+
+.splash-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.splash-progress-bar {
+    height: 100%;
+    background: white;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.splash-status {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.7);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* ============================================================================
+   NAVIGATION & STICKY TOC
+   Purpose: Fixed header with navigation and table of contents
+   Extend: Add dropdown menus or additional nav items
+   Expected: Stays visible during scroll, highlights current section
+============================================================================ */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-6);
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--primary-700);
+    text-decoration: none;
+}
+
+.header-brand svg {
+    width: 36px;
+    height: 36px;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin-left: auto;
+}
+
+.nav-link {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--border-radius);
+    transition: var(--transition-fast);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-600);
+    background: var(--primary-50);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-left: var(--space-6);
+}
+
+/* Search Bar */
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    width: 220px;
+    padding: var(--space-2) var(--space-4);
+    padding-left: 36px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: var(--text-sm);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    width: 280px;
+    background: var(--bg-secondary);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: var(--space-2);
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px var(--shadow-color);
+    display: none;
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.search-result-item:hover {
+    background: var(--primary-50);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+/* Theme & Language Toggles */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--bg-tertiary);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.icon-btn:hover {
+    background: var(--primary-100);
+    color: var(--primary-600);
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Language Dropdown */
+.lang-dropdown {
+    position: relative;
+}
+
+.lang-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: var(--space-2);
+    box-shadow: 0 10px 40px var(--shadow-color);
+    display: none;
+    z-index: 100;
+}
+
+.lang-menu.active {
+    display: block;
+}
+
+.lang-option {
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.lang-option:hover {
+    background: var(--primary-50);
+}
+
+.lang-option.selected {
+    background: var(--primary-100);
+    color: var(--primary-700);
+    font-weight: 600;
+}
+
+/* ============================================================================
+   GAMIFICATION HUD
+   Purpose: Displays progress, readiness metrics, and engagement stats
+   Extend: Add new metric cards or achievement badges
+   Expected: Updates in real-time based on user interactions
+============================================================================ */
+.hud-container {
+    position: fixed;
+    top: calc(var(--header-height) + var(--space-4));
+    right: var(--space-4);
+    width: 260px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    z-index: 900;
+    transition: var(--transition-base);
+}
+
+.hud-container.minimized {
+    width: auto;
+}
+
+.hud-container.minimized .hud-content {
+    display: none;
+}
+
+.hud-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.hud-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--primary-700);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.hud-toggle {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: var(--transition-fast);
+}
+
+.hud-container.minimized .hud-toggle {
+    transform: rotate(180deg);
+}
+
+.hud-content {
+    padding: var(--space-4);
+}
+
+.hud-metric {
+    margin-bottom: var(--space-4);
+}
+
+.hud-metric:last-child {
+    margin-bottom: 0;
+}
+
+.hud-metric-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-1);
+}
+
+.hud-metric-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.hud-metric-bar {
+    height: 6px;
+    background: var(--neutral-200);
+    border-radius: 3px;
+    margin-top: var(--space-2);
+    overflow: hidden;
+}
+
+.hud-metric-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.hud-metric-fill.coverage { background: linear-gradient(90deg, var(--success-500), var(--success-400)); }
+.hud-metric-fill.readiness { background: linear-gradient(90deg, var(--warning-500), var(--warning-400)); }
+.hud-metric-fill.impact { background: linear-gradient(90deg, var(--primary-500), var(--primary-400)); }
+
+/* ============================================================================
+   CONSTELLATION STATE VISUALIZER
+   Purpose: Visual representation of system state and module connections
+   Extend: Add new nodes for additional modules
+   Expected: Animates connections and highlights active states
+============================================================================ */
+.constellation-container {
+    position: fixed;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    width: 180px;
+    height: 180px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    z-index: 900;
+    overflow: hidden;
+}
+
+.constellation-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.constellation-label {
+    position: absolute;
+    bottom: var(--space-2);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* ============================================================================
+   MAIN CONTENT AREA
+   Purpose: Primary content container with parallax sections
+   Extend: Add new section types or modify layout
+============================================================================ */
+.main-content {
+    margin-top: var(--header-height);
+    padding-right: 280px; /* Space for HUD */
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        padding-right: 0;
+    }
+    .hud-container, .constellation-container {
+        display: none;
+    }
+}
+
+/* Hero Section with Parallax */
+.hero-section {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 100%);
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: var(--space-8);
+    max-width: 800px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: var(--space-2) var(--space-4);
+    border-radius: 20px;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-6);
+    backdrop-filter: blur(10px);
+}
+
+.hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success-400);
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+    font-size: var(--text-xl);
+    color: rgba(255,255,255,0.85);
+    margin-bottom: var(--space-8);
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--border-radius);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition-fast);
+}
+
+.btn-primary {
+    background: white;
+    color: var(--primary-700);
+}
+
+.btn-primary:hover {
+    background: var(--primary-50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+}
+
+/* Alert Banner */
+.alert-banner {
+    background: linear-gradient(90deg, var(--danger-500), var(--danger-600));
+    color: white;
+    padding: var(--space-3) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+}
+
+.alert-banner svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.alert-banner a {
+    color: white;
+    font-weight: 600;
+}
+
+/* ============================================================================
+   CONTENT SECTIONS
+   Purpose: Main informational sections with collapsible content
+   Extend: Add new section types or modify grid layouts
+============================================================================ */
+.section {
+    padding: var(--space-16) var(--space-6);
+}
+
+.section-alt {
+    background: var(--bg-tertiary);
+}
+
+.section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto var(--space-12);
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+}
+
+.section-subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+/* Risk Zone Cards */
+.zone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+.zone-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.zone-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+.zone-card-header {
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.zone-risk-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.zone-risk-indicator.critical { background: var(--danger-500); }
+.zone-risk-indicator.high { background: var(--warning-500); }
+.zone-risk-indicator.moderate { background: var(--warning-400); }
+.zone-risk-indicator.low { background: var(--success-500); }
+
+.zone-card-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.zone-card-body {
+    padding: var(--space-5);
+}
+
+.zone-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.zone-stat {
+    text-align: center;
+}
+
+.zone-stat-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--primary-600);
+}
+
+.zone-stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.zone-description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Collapsible Sections */
+.collapsible {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-4);
+    background: var(--bg-secondary);
+    overflow: hidden;
+}
+
+.collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.collapsible-header:hover {
+    background: var(--bg-tertiary);
+}
+
+.collapsible-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.collapsible-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: var(--transition-fast);
+}
+
+.collapsible.open .collapsible-icon {
+    transform: rotate(180deg);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.collapsible.open .collapsible-content {
+    max-height: 2000px;
+}
+
+.collapsible-body {
+    padding: var(--space-5);
+    padding-top: 0;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Module Links Grid */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+.module-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-6);
+    text-decoration: none;
+    transition: var(--transition-base);
+    display: flex;
+    flex-direction: column;
+}
+
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--shadow-color);
+    border-color: var(--primary-300);
+}
+
+.module-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-100);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+    color: var(--primary-600);
+}
+
+.module-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.module-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.module-description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.module-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    font-size: var(--text-xs);
+    color: var(--success-600);
+}
+
+.module-status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--success-500);
+    border-radius: 50%;
+}
+
+/* Data Tables */
+.data-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-secondary);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+}
+
+.data-table th,
+.data-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background: var(--bg-tertiary);
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover td {
+    background: var(--primary-50);
+}
+
+/* Equipment Cards */
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-4);
+}
+
+.equipment-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--space-4);
+    text-align: center;
+}
+
+.equipment-icon {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+}
+
+.equipment-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.equipment-desc {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ============================================================================
+   FOOTER
+   Purpose: Site footer with zero-harm note and attributions
+   Extend: Add additional links or sections as needed
+============================================================================ */
+.main-footer {
+    background: var(--neutral-900);
+    color: var(--neutral-300);
+    padding: var(--space-12) var(--space-6);
+}
+
+.footer-content {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+}
+
+.footer-section-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: var(--space-2);
+}
+
+.footer-links a {
+    color: var(--neutral-400);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+/* Zero Harm Note */
+.zero-harm-note {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--border-radius);
+    padding: var(--space-5);
+    margin-bottom: var(--space-8);
+}
+
+.zero-harm-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--success-400);
+    margin-bottom: var(--space-3);
+}
+
+.zero-harm-text {
+    font-size: var(--text-sm);
+    color: var(--neutral-400);
+    line-height: 1.7;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: var(--space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.footer-copyright {
+    font-size: var(--text-sm);
+    color: var(--neutral-500);
+}
+
+.footer-badges {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.footer-badge {
+    font-size: var(--text-xs);
+    padding: var(--space-1) var(--space-3);
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: var(--neutral-400);
+}
+
+/* ============================================================================
+   NOSCRIPT FALLBACK
+   Purpose: Basic functionality without JavaScript
+   Expected: Displays content and navigation without interactive features
+============================================================================ */
+noscript .noscript-notice {
+    background: var(--warning-500);
+    color: white;
+    padding: var(--space-4);
+    text-align: center;
+}
+
+/* ============================================================================
+   PRINT STYLES
+   Purpose: Optimized output for printing
+   Expected: Clean, readable printout without interactive elements
+============================================================================ */
+@media print {
+    .splash-screen,
+    .main-header,
+    .hud-container,
+    .constellation-container,
+    .search-container,
+    .btn,
+    .alert-banner {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        color: black;
+        background: white;
+    }
+    
+    .main-content {
+        margin-top: 0;
+        padding-right: 0;
+    }
+    
+    .hero-section {
+        min-height: auto;
+        background: none !important;
+        color: black;
+        padding: 20pt 0;
+    }
+    
+    .hero-title, .hero-subtitle {
+        color: black !important;
+        text-shadow: none !important;
+    }
+    
+    .section {
+        padding: 20pt 0;
+        page-break-inside: avoid;
+    }
+    
+    .collapsible-content {
+        max-height: none !important;
+    }
+    
+    a {
+        color: black;
+        text-decoration: underline;
+    }
+    
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 10pt;
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+============================================================================ */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 60px;
+    }
+    
+    .hero-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .hero-subtitle {
+        font-size: var(--text-base);
+    }
+    
+    .section {
+        padding: var(--space-10) var(--space-4);
+    }
+    
+    .section-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .header-nav {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+============================================================================ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+.hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Noscript Fallback -->
+    <noscript>
+        <div class="noscript-notice">
+            <strong>JavaScript Required:</strong> This application works best with JavaScript enabled. 
+            Core content is still accessible below, but interactive features will be limited.
+        </div>
+    </noscript>
+
+    <!-- ========================================================================
+         SPLASH SCREEN
+         Purpose: Loading animation while app initializes
+         Tooltip: Automatically fades after IndexedDB and translations load
+    ======================================================================== -->
+    <div class="splash-screen" id="splashScreen" aria-label="Loading application">
+        <div class="splash-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M30 60 Q50 30 70 60" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M25 65 Q50 40 75 65" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <circle cx="50" cy="35" r="8" fill="white"/>
+                <path d="M50 50 L50 70 M40 60 L50 70 L60 60" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h1 class="splash-title">LA Flood Resilience Hub</h1>
+        <p class="splash-subtitle">Preparing emergency resources...</p>
+        <div class="splash-progress">
+            <div class="splash-progress-bar" id="splashProgress"></div>
+        </div>
+        <p class="splash-status" id="splashStatus">Initializing...</p>
+    </div>
+
+    <!-- ========================================================================
+         MAIN HEADER & NAVIGATION
+         Purpose: Sticky navigation with search, language, and theme controls
+         Tooltip: Highlights current section, supports keyboard navigation
+    ======================================================================== -->
+    <header class="main-header" role="banner">
+        <a href="#" class="header-brand" aria-label="LA Flood Resilience Hub Home">
+            <svg viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 24 Q20 14 28 24" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="20" cy="14" r="4" fill="currentColor"/>
+            </svg>
+            <span data-translate="app_title">LA Flood Hub</span>
+        </a>
+        
+        <nav class="header-nav" role="navigation" aria-label="Main navigation">
+            <a href="#risk-zones" class="nav-link" data-translate="nav_zones">Risk Zones</a>
+            <a href="#modules" class="nav-link" data-translate="nav_modules">Modules</a>
+            <a href="#equipment" class="nav-link" data-translate="nav_equipment">Equipment</a>
+            <a href="#data" class="nav-link" data-translate="nav_data">Data</a>
+            <a href="#community" class="nav-link" data-translate="nav_community">Community</a>
+        </nav>
+        
+        <div class="header-actions">
+            <!-- Search -->
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input type="search" class="search-input" id="searchInput" 
+                       placeholder="Search..." data-translate-placeholder="search_placeholder"
+                       aria-label="Search content">
+                <div class="search-results" id="searchResults" role="listbox"></div>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="lang-dropdown">
+                <button class="icon-btn" id="langBtn" aria-label="Select language" title="Change language">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </button>
+                <div class="lang-menu" id="langMenu" role="listbox"></div>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <button class="icon-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-light">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ========================================================================
+         GAMIFICATION HUD
+         Purpose: Real-time metrics display for coverage, readiness, and impact
+         Tooltip: Click header to minimize; updates automatically from IndexedDB
+    ======================================================================== -->
+    <aside class="hud-container" id="hudContainer" aria-label="Status dashboard">
+        <div class="hud-header" id="hudHeader" tabindex="0" role="button" aria-expanded="true">
+            <span class="hud-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span data-translate="hud_title">Resilience Status</span>
+            </span>
+            <svg class="hud-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 15l-6-6-6 6"/>
+            </svg>
+        </div>
+        <div class="hud-content">
+            <div class="hud-metric">
+                <div class="hud-metric-label" data-translate="hud_coverage">Zone Coverage</div>
+                <div class="hud-metric-value" id="hudCoverage">78%</div>
+                <div class="hud-metric-bar">
+                    <div class="hud-metric-fill coverage" id="hudCoverageBar" style="width: 78%"></div>
+                </div>
+            </div>
+            <div class="hud-metric">
+                <div class="hud-metric-label" data-translate="hud_readiness">Readiness Score</div>
+                <div class="hud-metric-value" id="hudReadiness">65%</div>
+                <div class="hud-metric-bar">
+                    <div class="hud-metric-fill readiness" id="hudReadinessBar" style="width: 65%"></div>
+                </div>
+            </div>
+            <div class="hud-metric">
+                <div class="hud-metric-label" data-translate="hud_impact">Intervention Impact</div>
+                <div class="hud-metric-value" id="hudImpact">82%</div>
+                <div class="hud-metric-bar">
+                    <div class="hud-metric-fill impact" id="hudImpactBar" style="width: 82%"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========================================================================
+         CONSTELLATION STATE VISUALIZER
+         Purpose: Visual network graph showing module connections and states
+         Tooltip: Nodes represent modules; connections show data relationships
+    ======================================================================== -->
+    <div class="constellation-container" id="constellationContainer">
+        <canvas class="constellation-canvas" id="constellationCanvas"></canvas>
+        <span class="constellation-label" data-translate="constellation_label">System State</span>
+    </div>
+
+    <!-- ========================================================================
+         MAIN CONTENT
+    ======================================================================== -->
+    <main class="main-content" role="main">
+        <!-- Alert Banner -->
+        <div class="alert-banner" id="alertBanner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span data-translate="alert_active">
+                <strong>Active Alert:</strong> Flash Flood Warnings in effect for LA burn scar areas through Dec 27, 2025.
+            </span>
+            <a href="#risk-zones" data-translate="alert_link">View affected zones →</a>
+        </div>
+
+        <!-- Hero Section with Parallax -->
+        <section class="hero-section" id="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    <span data-translate="hero_badge">Real-Time Flood Intelligence</span>
+                </div>
+                <h1 class="hero-title" data-translate="hero_title">
+                    Los Angeles Flood Resilience Hub
+                </h1>
+                <p class="hero-subtitle" data-translate="hero_subtitle">
+                    Comprehensive flood mitigation knowledge base with altitudinal mapping, 
+                    rapid-response equipment strategies, and community guidance for LA's high-risk zones.
+                </p>
+                <div class="hero-actions">
+                    <a href="#risk-zones" class="btn btn-primary" data-translate="hero_cta_primary">
+                        View Risk Zones
+                    </a>
+                    <a href="#modules" class="btn btn-secondary" data-translate="hero_cta_secondary">
+                        Explore Modules
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Risk Zones Section -->
+        <section class="section" id="risk-zones">
+            <div class="section-header">
+                <h2 class="section-title" data-translate="zones_title">High-Risk Flood Zones</h2>
+                <p class="section-subtitle" data-translate="zones_subtitle">
+                    Current risk assessment based on altitude, burn scar proximity, soil saturation, and historical flood data.
+                </p>
+            </div>
+            
+            <div class="zone-grid">
+                <!-- Altadena / Eaton Fire Zone -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator critical" title="Critical Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_altadena">Altadena / Eaton Burn Scar</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">1,200-2,400</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">Critical</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_altadena_desc">
+                            January 2025 Eaton Fire burn scar. Hydrophobic soil conditions. 
+                            Multiple debris flow events in Feb 2025. Active evacuation orders for 383+ properties.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Pacific Palisades Zone -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator critical" title="Critical Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_palisades">Pacific Palisades Burn Scar</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">0-1,500</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">Critical</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_palisades_desc">
+                            January 2025 Palisades Fire zone. 13,000+ ft of K-rail installed. 
+                            18 debris basins actively monitored. Topanga Canyon Blvd closures during storms.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Wrightwood / San Gabriel Mountains -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator high" title="High Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_wrightwood">Wrightwood / San Gabriel Mtns</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">5,900-6,000</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">High</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_wrightwood_desc">
+                            Highway 2 corridor highly vulnerable. Dec 2025: Homes encased in mud, rooftop rescues required.
+                            High elevation increases flash flood intensity from mountain runoff.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Malibu Coast -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator high" title="High Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_malibu">Malibu / Topanga Canyon</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">0-2,000</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">High</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_malibu_desc">
+                            Woolsey Fire (2018) legacy burn scars. Post-fire flood vulnerability maps active.
+                            Canyon roads prone to washout. PCH closures frequent during atmospheric rivers.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- LA River Corridor -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator moderate" title="Moderate Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_lariver">LA River Corridor</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">100-400</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">Moderate</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_lariver_desc">
+                            Concrete channel system. Swift water rescue risks during high flow.
+                            Dec 2025: Man rescued from drainage tunnel in Winnetka. Homeless populations at risk.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- I-5 / I-210 Corridor -->
+                <article class="zone-card">
+                    <div class="zone-card-header">
+                        <span class="zone-risk-indicator moderate" title="Moderate Risk"></span>
+                        <h3 class="zone-card-title" data-translate="zone_freeway">I-5 / I-210 Freeway Corridor</h3>
+                    </div>
+                    <div class="zone-card-body">
+                        <div class="zone-stats">
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">500-1,500</div>
+                                <div class="zone-stat-label" data-translate="zone_altitude">ft Altitude</div>
+                            </div>
+                            <div class="zone-stat">
+                                <div class="zone-stat-value">Moderate</div>
+                                <div class="zone-stat-label" data-translate="zone_risk">Risk Level</div>
+                            </div>
+                        </div>
+                        <p class="zone-description" data-translate="zone_freeway_desc">
+                            Major arterial flooding risk. Dec 2025: I-5 fully submerged in LA County.
+                            Burbank, Glendale, Santa Clarita within high-risk rainfall area.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Modules Section -->
+        <section class="section section-alt" id="modules">
+            <div class="section-header">
+                <h2 class="section-title" data-translate="modules_title">Knowledge Modules</h2>
+                <p class="section-subtitle" data-translate="modules_subtitle">
+                    Specialized guides for rapid flood mitigation, equipment deployment, and community resilience.
+                </p>
+            </div>
+            
+            <div class="modules-grid">
+                <a href="quick-fixes.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_quickfix_title">Quick-Fix Strategies</h3>
+                    <p class="module-description" data-translate="module_quickfix_desc">
+                        Rapid civic and heavy equipment interventions organized by high-risk zone. 
+                        Includes deployment checklists, equipment manuals, and impact assessments.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+
+                <a href="altitudinal-analysis.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 17l6-6 4 4 8-8"/>
+                            <path d="M17 7h4v4"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_altitude_title">Altitudinal Analysis</h3>
+                    <p class="module-description" data-translate="module_altitude_desc">
+                        Topographic overlays showing altitude-risk correlations, soil saturation models, 
+                        and burn scar proximity mapping for targeted interventions.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+
+                <a href="debris-flow-mitigation.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_debris_title">Debris Flow Mitigation</h3>
+                    <p class="module-description" data-translate="module_debris_desc">
+                        Specialized protocols for post-fire debris flow prevention including basin management, 
+                        slope stabilization, and early warning systems.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+
+                <a href="community-guides.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_community_title">Community Guides</h3>
+                    <p class="module-description" data-translate="module_community_desc">
+                        Evacuation routes, shelter locations, home flood-proofing tips, 
+                        and volunteer coordination resources for residents and local agencies.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+
+                <a href="shadow-cascades.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_shadow_title">Shadow Cascades</h3>
+                    <p class="module-description" data-translate="module_shadow_desc">
+                        Global parallel interventions database. Lessons learned from Japan, Netherlands, 
+                        Australia, and other regions with applicable flood mitigation strategies.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+
+                <a href="docs/zero_harm_note.html" class="module-card">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="module_docs_title">Documentation</h3>
+                    <p class="module-description" data-translate="module_docs_desc">
+                        Zero-harm principles, anti-inversion safeguards, equipment safety guidelines, 
+                        and ethical deployment protocols.
+                    </p>
+                    <div class="module-status">
+                        <span class="module-status-dot"></span>
+                        <span data-translate="module_status">Available Offline</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Equipment Section -->
+        <section class="section" id="equipment">
+            <div class="section-header">
+                <h2 class="section-title" data-translate="equipment_title">Civic & Heavy Equipment</h2>
+                <p class="section-subtitle" data-translate="equipment_subtitle">
+                    Proven flood mitigation equipment deployed in LA and globally.
+                </p>
+            </div>
+
+            <!-- Collapsible: Barrier Systems -->
+            <div class="collapsible" id="collapsible-barriers">
+                <div class="collapsible-header" tabindex="0" role="button" aria-expanded="false">
+                    <span class="collapsible-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        </svg>
+                        <span data-translate="equip_barriers_title">Barrier Systems</span>
+                    </span>
+                    <svg class="collapsible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+                <div class="collapsible-content">
+                    <div class="collapsible-body">
+                        <div class="equipment-grid">
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚧</div>
+                                <div class="equipment-name">K-Rails</div>
+                                <div class="equipment-desc">Concrete barriers for debris flow diversion. 13,000+ ft deployed in Palisades.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🧱</div>
+                                <div class="equipment-name">Muscle Walls</div>
+                                <div class="equipment-desc">Interlocking concrete blocks for rapid barrier construction.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🛡️</div>
+                                <div class="equipment-name">Sandbags</div>
+                                <div class="equipment-desc">271,000+ burlap bags stockpiled across 10 DWR sites in SoCal.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">📦</div>
+                                <div class="equipment-name">Super Sacks</div>
+                                <div class="equipment-desc">Large FIBC bags (5,650 ready). Replace 750 sandbags each.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🌊</div>
+                                <div class="equipment-name">Water-Filled Barriers</div>
+                                <div class="equipment-desc">WIPP tubes up to 150ft. Fight water with water.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🧽</div>
+                                <div class="equipment-name">Quick Dams</div>
+                                <div class="equipment-desc">Hydrophilic polymer bags. Expand on water contact.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible: Heavy Machinery -->
+            <div class="collapsible" id="collapsible-machinery">
+                <div class="collapsible-header" tabindex="0" role="button" aria-expanded="false">
+                    <span class="collapsible-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        <span data-translate="equip_machinery_title">Heavy Machinery</span>
+                    </span>
+                    <svg class="collapsible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+                <div class="collapsible-content">
+                    <div class="collapsible-body">
+                        <div class="equipment-grid">
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚜</div>
+                                <div class="equipment-name">Dozers</div>
+                                <div class="equipment-desc">CA National Guard: 2 dozers deployed for debris basin clearing.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🏗️</div>
+                                <div class="equipment-name">Excavators</div>
+                                <div class="equipment-desc">Channel clearing and emergency debris removal.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚛</div>
+                                <div class="equipment-name">Dump Trucks</div>
+                                <div class="equipment-desc">4 trucks hauling 527,000 cu yards from debris basins.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🔧</div>
+                                <div class="equipment-name">Loaders</div>
+                                <div class="equipment-desc">Front-end loaders for rapid material movement.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible: Slope Protection -->
+            <div class="collapsible" id="collapsible-slope">
+                <div class="collapsible-header" tabindex="0" role="button" aria-expanded="false">
+                    <span class="collapsible-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 17l6-6 4 4 8-8"/>
+                        </svg>
+                        <span data-translate="equip_slope_title">Slope Protection</span>
+                    </span>
+                    <svg class="collapsible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+                <div class="collapsible-content">
+                    <div class="collapsible-body">
+                        <div class="equipment-grid">
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🎪</div>
+                                <div class="equipment-name">Plastic Sheeting</div>
+                                <div class="equipment-desc">777 rolls stockpiled. Hillside tarp coverage for burn scars.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🌾</div>
+                                <div class="equipment-name">Straw Wattles</div>
+                                <div class="equipment-desc">Erosion control tubes. 630,250 ft placed by Cal OES task force.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🪵</div>
+                                <div class="equipment-name">Wood Stakes</div>
+                                <div class="equipment-desc">17,790 stakes for securing erosion materials.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🧦</div>
+                                <div class="equipment-name">Compost Socks</div>
+                                <div class="equipment-desc">Filter contaminants from runoff. 400+ CCC members deployed.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🥅</div>
+                                <div class="equipment-name">Silt Fencing</div>
+                                <div class="equipment-desc">Sediment capture barriers for watershed protection.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible: Rescue Equipment -->
+            <div class="collapsible" id="collapsible-rescue">
+                <div class="collapsible-header" tabindex="0" role="button" aria-expanded="false">
+                    <span class="collapsible-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 8v4l3 3"/>
+                        </svg>
+                        <span data-translate="equip_rescue_title">Rescue & Response</span>
+                    </span>
+                    <svg class="collapsible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+                <div class="collapsible-content">
+                    <div class="collapsible-body">
+                        <div class="equipment-grid">
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚁</div>
+                                <div class="equipment-name">Helicopters</div>
+                                <div class="equipment-desc">3 pre-positioned. Rooftop rescues in Wrightwood Dec 2025.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚤</div>
+                                <div class="equipment-name">Swift Water Teams</div>
+                                <div class="equipment-desc">10 teams (16 members each) for channel rescues.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚒</div>
+                                <div class="equipment-name">Type 3 Apparatus</div>
+                                <div class="equipment-desc">Heavy-duty trucks for difficult terrain. 22-member strike teams.</div>
+                            </div>
+                            <div class="equipment-card">
+                                <div class="equipment-icon">🚙</div>
+                                <div class="equipment-name">High-Water Vehicles</div>
+                                <div class="equipment-desc">CA National Guard assets for flooded road access.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historical Data Section -->
+        <section class="section section-alt" id="data">
+            <div class="section-header">
+                <h2 class="section-title" data-translate="data_title">Historical Flood Data</h2>
+                <p class="section-subtitle" data-translate="data_subtitle">
+                    Major flood events and debris flows in Los Angeles County (2015-2025).
+                </p>
+            </div>
+
+            <div style="max-width: var(--max-content-width); margin: 0 auto;">
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-translate="data_col_date">Date</th>
+                                <th data-translate="data_col_event">Event</th>
+                                <th data-translate="data_col_location">Location</th>
+                                <th data-translate="data_col_rainfall">Rainfall</th>
+                                <th data-translate="data_col_impact">Impact</th>
+                                <th data-translate="data_col_response">Response</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dec 2025</td>
+                                <td>Atmospheric River (High Risk Level 4)</td>
+                                <td>LA County-wide</td>
+                                <td>4-8" coastal, 8-12" mountains</td>
+                                <td>I-5 submerged, 100+ rescues, homes encased in mud</td>
+                                <td>State of Emergency, 45 fire engines pre-deployed</td>
+                            </tr>
+                            <tr>
+                                <td>Feb 2025</td>
+                                <td>Post-Fire Debris Flows</td>
+                                <td>Altadena, Palisades burn scars</td>
+                                <td>3-5" over 24 hours</td>
+                                <td>Cars swept downhill, road washouts on Tanoble Dr</td>
+                                <td>K-rail installation, evacuation orders</td>
+                            </tr>
+                            <tr>
+                                <td>Jan 2025</td>
+                                <td>Eaton & Palisades Fires</td>
+                                <td>Altadena, Pacific Palisades</td>
+                                <td>N/A (created burn scars)</td>
+                                <td>23,000+ acres burned, created high debris flow risk</td>
+                                <td>Watershed Emergency Response teams mobilized</td>
+                            </tr>
+                            <tr>
+                                <td>Aug 2023</td>
+                                <td>Tropical Storm Hilary</td>
+                                <td>LA Basin, mountain areas</td>
+                                <td>Up to 6" in 24 hours</td>
+                                <td>Downtown flooding, mountain road washouts</td>
+                                <td>First tropical storm warning in 84 years</td>
+                            </tr>
+                            <tr>
+                                <td>Jan 2023</td>
+                                <td>Atmospheric River Series</td>
+                                <td>Southern California</td>
+                                <td>10-15" cumulative</td>
+                                <td>Major flooding, ended multi-year drought</td>
+                                <td>Cal OES emergency operations activated</td>
+                            </tr>
+                            <tr>
+                                <td>Nov 2018</td>
+                                <td>Woolsey Fire + Floods</td>
+                                <td>Malibu, Topanga</td>
+                                <td>Post-fire rains 2-4"</td>
+                                <td>Debris flows, PCH closures, property damage</td>
+                                <td>Post-fire flood vulnerability mapping created</td>
+                            </tr>
+                            <tr>
+                                <td>Jan 2018</td>
+                                <td>Montecito Debris Flow</td>
+                                <td>Santa Barbara County</td>
+                                <td>0.5" in 15 minutes</td>
+                                <td>23 fatalities, 400+ homes destroyed</td>
+                                <td>Thomas Fire burn scar; catalyst for LA preparedness</td>
+                            </tr>
+                            <tr>
+                                <td>Feb 2017</td>
+                                <td>AR Storm / Oroville Dam</td>
+                                <td>Northern CA (impacted LA planning)</td>
+                                <td>Record rainfall statewide</td>
+                                <td>188,000 evacuated from Oroville; LA studied lessons</td>
+                                <td>Infrastructure review statewide</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Resources Section -->
+        <section class="section" id="community">
+            <div class="section-header">
+                <h2 class="section-title" data-translate="community_title">Community Resources</h2>
+                <p class="section-subtitle" data-translate="community_subtitle">
+                    Essential information for residents, local agencies, and volunteers.
+                </p>
+            </div>
+
+            <div class="modules-grid" style="max-width: var(--max-content-width); margin: 0 auto;">
+                <div class="module-card" style="cursor: default;">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="res_sandbags_title">Sandbag Locations</h3>
+                    <p class="module-description" data-translate="res_sandbags_desc">
+                        Available at all LA City fire stations. County sites: Altadena (2310 N. Glassell St), 
+                        and 10 DWR stockpile locations across SoCal. Proof of residency required at some locations.
+                    </p>
+                </div>
+
+                <div class="module-card" style="cursor: default;">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="res_alerts_title">Emergency Alerts</h3>
+                    <p class="module-description" data-translate="res_alerts_desc">
+                        Sign up at NotifyLA.org for real-time alerts. AlertOC for Orange County. 
+                        Wireless Emergency Alerts (WEA) automatic for evacuation orders.
+                    </p>
+                </div>
+
+                <div class="module-card" style="cursor: default;">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="res_shelter_title">Evacuation Shelters</h3>
+                    <p class="module-description" data-translate="res_shelter_desc">
+                        San Bernardino County Fairgrounds (Wrightwood evacuees). 
+                        LAHSA providing hotel vouchers for unhoused individuals. Check local Red Cross for active shelters.
+                    </p>
+                </div>
+
+                <div class="module-card" style="cursor: default;">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h3 class="module-title" data-translate="res_hotlines_title">Emergency Hotlines</h3>
+                    <p class="module-description" data-translate="res_hotlines_desc">
+                        911 for emergencies. SCE Outages: 800-611-1911. 
+                        LA County Public Works: 626-458-5100. Report price gouging to CA Attorney General.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========================================================================
+         FOOTER
+         Purpose: Site information, zero-harm commitment, and attributions
+    ======================================================================== -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <!-- Zero Harm Note -->
+            <div class="zero-harm-note">
+                <div class="zero-harm-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span data-translate="zero_harm_title">Zero-Harm Commitment & Anti-Inversion Safeguard</span>
+                </div>
+                <p class="zero-harm-text" data-translate="zero_harm_text">
+                    This application is designed exclusively for public safety, emergency preparedness, and community resilience. 
+                    It contains no tracking, no external telemetry, and no features that could be repurposed for surveillance or harm. 
+                    All data is stored locally on your device using IndexedDB. Analytics are optional, local-only, transparent, and user-resettable. 
+                    No information leaves your device without explicit consent. Heavy equipment guidance includes safety protocols to prevent misuse. 
+                    Input is sanitized and rate-limited to prevent abuse.
+                </p>
+            </div>
+
+            <div class="footer-grid">
+                <div>
+                    <h4 class="footer-section-title" data-translate="footer_modules">Modules</h4>
+                    <ul class="footer-links">
+                        <li><a href="quick-fixes.html">Quick-Fix Strategies</a></li>
+                        <li><a href="altitudinal-analysis.html">Altitudinal Analysis</a></li>
+                        <li><a href="debris-flow-mitigation.html">Debris Flow Mitigation</a></li>
+                        <li><a href="community-guides.html">Community Guides</a></li>
+                        <li><a href="shadow-cascades.html">Shadow Cascades</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-section-title" data-translate="footer_docs">Documentation</h4>
+                    <ul class="footer-links">
+                        <li><a href="docs/zero_harm_note.html">Zero-Harm Principles</a></li>
+                        <li><a href="docs/anti_inversion.html">Anti-Inversion Guide</a></li>
+                        <li><a href="docs/equipment_safety.html">Equipment Safety</a></li>
+                        <li><a href="docs/data_sources.html">Data Sources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-section-title" data-translate="footer_resources">Official Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://pw.lacounty.gov/floodzone/" target="_blank" rel="noopener">LA County Flood Zone Map</a></li>
+                        <li><a href="https://www.weather.gov/lox/" target="_blank" rel="noopener">NWS Los Angeles</a></li>
+                        <li><a href="https://www.caloes.ca.gov/" target="_blank" rel="noopener">Cal OES</a></li>
+                        <li><a href="https://notifyla.org/" target="_blank" rel="noopener">NotifyLA Alerts</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-section-title" data-translate="footer_about">About</h4>
+                    <ul class="footer-links">
+                        <li><a href="#attributions">Attributions & Licensing</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#accessibility">Accessibility</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 LA Flood Resilience Hub. Open-source under MIT License. 
+                    Data compiled from NWS, USGS, Cal OES, LA County Public Works, and cited sources.
+                </p>
+                <div class="footer-badges">
+                    <span class="footer-badge">Offline-First</span>
+                    <span class="footer-badge">No Tracking</span>
+                    <span class="footer-badge">Open Source</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================================================
+         JAVASCRIPT - Core Application Logic
+         All code is organized into clearly named sections with tooltips
+    ======================================================================== -->
+    <script>
+/* ============================================================================
+   CONFIGURATION & CONSTANTS
+   Purpose: Central configuration for the application
+   Extend: Add new config options here
+   Expected: Used throughout the application for consistent behavior
+============================================================================ */
+const CONFIG = {
+    DB_NAME: 'LAFloodHubDB',
+    DB_VERSION: 1,
+    STORES: {
+        settings: 'settings',
+        hudData: 'hudData',
+        searchIndex: 'searchIndex',
+        userChoices: 'userChoices'
+    },
+    DEFAULT_LANG: 'en',
+    SPLASH_MIN_TIME: 1500,
+    SEARCH_DEBOUNCE: 300
+};
+
+/* ============================================================================
+   TRANSLATION ENGINE
+   Purpose: Full client-side translation supporting 20+ languages
+   Extend: Add new languages to TRANSLATIONS object
+   Expected: Instant language switching without page reload
+============================================================================ */
+const TRANSLATIONS = {
+    en: {
+        app_title: 'LA Flood Hub',
+        nav_zones: 'Risk Zones',
+        nav_modules: 'Modules',
+        nav_equipment: 'Equipment',
+        nav_data: 'Data',
+        nav_community: 'Community',
+        search_placeholder: 'Search...',
+        hud_title: 'Resilience Status',
+        hud_coverage: 'Zone Coverage',
+        hud_readiness: 'Readiness Score',
+        hud_impact: 'Intervention Impact',
+        constellation_label: 'System State',
+        alert_active: '<strong>Active Alert:</strong> Flash Flood Warnings in effect for LA burn scar areas through Dec 27, 2025.',
+        alert_link: 'View affected zones →',
+        hero_badge: 'Real-Time Flood Intelligence',
+        hero_title: 'Los Angeles Flood Resilience Hub',
+        hero_subtitle: 'Comprehensive flood mitigation knowledge base with altitudinal mapping, rapid-response equipment strategies, and community guidance for LA\'s high-risk zones.',
+        hero_cta_primary: 'View Risk Zones',
+        hero_cta_secondary: 'Explore Modules',
+        zones_title: 'High-Risk Flood Zones',
+        zones_subtitle: 'Current risk assessment based on altitude, burn scar proximity, soil saturation, and historical flood data.',
+        zone_altitude: 'ft Altitude',
+        zone_risk: 'Risk Level',
+        zone_altadena: 'Altadena / Eaton Burn Scar',
+        zone_altadena_desc: 'January 2025 Eaton Fire burn scar. Hydrophobic soil conditions. Multiple debris flow events in Feb 2025. Active evacuation orders for 383+ properties.',
+        zone_palisades: 'Pacific Palisades Burn Scar',
+        zone_palisades_desc: 'January 2025 Palisades Fire zone. 13,000+ ft of K-rail installed. 18 debris basins actively monitored. Topanga Canyon Blvd closures during storms.',
+        zone_wrightwood: 'Wrightwood / San Gabriel Mtns',
+        zone_wrightwood_desc: 'Highway 2 corridor highly vulnerable. Dec 2025: Homes encased in mud, rooftop rescues required. High elevation increases flash flood intensity from mountain runoff.',
+        zone_malibu: 'Malibu / Topanga Canyon',
+        zone_malibu_desc: 'Woolsey Fire (2018) legacy burn scars. Post-fire flood vulnerability maps active. Canyon roads prone to washout. PCH closures frequent during atmospheric rivers.',
+        zone_lariver: 'LA River Corridor',
+        zone_lariver_desc: 'Concrete channel system. Swift water rescue risks during high flow. Dec 2025: Man rescued from drainage tunnel in Winnetka. Homeless populations at risk.',
+        zone_freeway: 'I-5 / I-210 Freeway Corridor',
+        zone_freeway_desc: 'Major arterial flooding risk. Dec 2025: I-5 fully submerged in LA County. Burbank, Glendale, Santa Clarita within high-risk rainfall area.',
+        modules_title: 'Knowledge Modules',
+        modules_subtitle: 'Specialized guides for rapid flood mitigation, equipment deployment, and community resilience.',
+        module_quickfix_title: 'Quick-Fix Strategies',
+        module_quickfix_desc: 'Rapid civic and heavy equipment interventions organized by high-risk zone. Includes deployment checklists, equipment manuals, and impact assessments.',
+        module_altitude_title: 'Altitudinal Analysis',
+        module_altitude_desc: 'Topographic overlays showing altitude-risk correlations, soil saturation models, and burn scar proximity mapping for targeted interventions.',
+        module_debris_title: 'Debris Flow Mitigation',
+        module_debris_desc: 'Specialized protocols for post-fire debris flow prevention including basin management, slope stabilization, and early warning systems.',
+        module_community_title: 'Community Guides',
+        module_community_desc: 'Evacuation routes, shelter locations, home flood-proofing tips, and volunteer coordination resources for residents and local agencies.',
+        module_shadow_title: 'Shadow Cascades',
+        module_shadow_desc: 'Global parallel interventions database. Lessons learned from Japan, Netherlands, Australia, and other regions with applicable flood mitigation strategies.',
+        module_docs_title: 'Documentation',
+        module_docs_desc: 'Zero-harm principles, anti-inversion safeguards, equipment safety guidelines, and ethical deployment protocols.',
+        module_status: 'Available Offline',
+        equipment_title: 'Civic & Heavy Equipment',
+        equipment_subtitle: 'Proven flood mitigation equipment deployed in LA and globally.',
+        equip_barriers_title: 'Barrier Systems',
+        equip_machinery_title: 'Heavy Machinery',
+        equip_slope_title: 'Slope Protection',
+        equip_rescue_title: 'Rescue & Response',
+        data_title: 'Historical Flood Data',
+        data_subtitle: 'Major flood events and debris flows in Los Angeles County (2015-2025).',
+        data_col_date: 'Date',
+        data_col_event: 'Event',
+        data_col_location: 'Location',
+        data_col_rainfall: 'Rainfall',
+        data_col_impact: 'Impact',
+        data_col_response: 'Response',
+        community_title: 'Community Resources',
+        community_subtitle: 'Essential information for residents, local agencies, and volunteers.',
+        res_sandbags_title: 'Sandbag Locations',
+        res_sandbags_desc: 'Available at all LA City fire stations. County sites: Altadena (2310 N. Glassell St), and 10 DWR stockpile locations across SoCal.',
+        res_alerts_title: 'Emergency Alerts',
+        res_alerts_desc: 'Sign up at NotifyLA.org for real-time alerts. AlertOC for Orange County. Wireless Emergency Alerts (WEA) automatic for evacuation orders.',
+        res_shelter_title: 'Evacuation Shelters',
+        res_shelter_desc: 'San Bernardino County Fairgrounds (Wrightwood evacuees). LAHSA providing hotel vouchers for unhoused individuals.',
+        res_hotlines_title: 'Emergency Hotlines',
+        res_hotlines_desc: '911 for emergencies. SCE Outages: 800-611-1911. LA County Public Works: 626-458-5100.',
+        zero_harm_title: 'Zero-Harm Commitment & Anti-Inversion Safeguard',
+        zero_harm_text: 'This application is designed exclusively for public safety, emergency preparedness, and community resilience. It contains no tracking, no external telemetry, and no features that could be repurposed for surveillance or harm. All data is stored locally on your device using IndexedDB.',
+        footer_modules: 'Modules',
+        footer_docs: 'Documentation',
+        footer_resources: 'Official Resources',
+        footer_about: 'About'
+    },
+    es: {
+        app_title: 'Centro de Inundaciones LA',
+        nav_zones: 'Zonas de Riesgo',
+        nav_modules: 'Módulos',
+        nav_equipment: 'Equipo',
+        nav_data: 'Datos',
+        nav_community: 'Comunidad',
+        search_placeholder: 'Buscar...',
+        hud_title: 'Estado de Resiliencia',
+        hud_coverage: 'Cobertura de Zona',
+        hud_readiness: 'Puntuación de Preparación',
+        hud_impact: 'Impacto de Intervención',
+        hero_badge: 'Inteligencia de Inundaciones en Tiempo Real',
+        hero_title: 'Centro de Resiliencia ante Inundaciones de Los Ángeles',
+        hero_subtitle: 'Base de conocimientos integral para mitigación de inundaciones con mapeo altitudinal, estrategias de equipo de respuesta rápida y orientación comunitaria.',
+        hero_cta_primary: 'Ver Zonas de Riesgo',
+        hero_cta_secondary: 'Explorar Módulos',
+        zones_title: 'Zonas de Alto Riesgo de Inundación',
+        zones_subtitle: 'Evaluación de riesgo actual basada en altitud, proximidad a cicatrices de incendios, saturación del suelo y datos históricos.',
+        equipment_title: 'Equipo Cívico y Pesado',
+        equipment_subtitle: 'Equipo de mitigación de inundaciones probado desplegado en LA y globalmente.',
+        zero_harm_title: 'Compromiso de Cero Daño y Salvaguarda Anti-Inversión',
+        zero_harm_text: 'Esta aplicación está diseñada exclusivamente para seguridad pública, preparación para emergencias y resiliencia comunitaria.'
+    },
+    zh: {
+        app_title: '洛杉矶防洪中心',
+        nav_zones: '风险区域',
+        nav_modules: '模块',
+        nav_equipment: '设备',
+        nav_data: '数据',
+        nav_community: '社区',
+        search_placeholder: '搜索...',
+        hud_title: '韧性状态',
+        hero_badge: '实时洪水情报',
+        hero_title: '洛杉矶洪水韧性中心',
+        hero_subtitle: '全面的洪水缓解知识库，包括海拔测绘、快速响应设备策略和社区指导。',
+        hero_cta_primary: '查看风险区域',
+        hero_cta_secondary: '探索模块'
+    },
+    ja: {
+        app_title: 'LA洪水対策ハブ',
+        nav_zones: 'リスクゾーン',
+        nav_modules: 'モジュール',
+        nav_equipment: '機器',
+        nav_data: 'データ',
+        nav_community: 'コミュニティ',
+        search_placeholder: '検索...',
+        hero_title: 'ロサンゼルス洪水レジリエンスハブ',
+        hero_subtitle: '高度マッピング、迅速対応機器戦略、コミュニティガイダンスを含む包括的な洪水緩和知識ベース。'
+    },
+    ko: {
+        app_title: 'LA 홍수 허브',
+        nav_zones: '위험 구역',
+        nav_modules: '모듈',
+        nav_equipment: '장비',
+        nav_data: '데이터',
+        nav_community: '커뮤니티',
+        search_placeholder: '검색...',
+        hero_title: '로스앤젤레스 홍수 복원력 허브'
+    },
+    vi: {
+        app_title: 'Trung tâm Lũ lụt LA',
+        nav_zones: 'Vùng Nguy hiểm',
+        nav_modules: 'Mô-đun',
+        nav_equipment: 'Thiết bị',
+        nav_data: 'Dữ liệu',
+        nav_community: 'Cộng đồng',
+        search_placeholder: 'Tìm kiếm...',
+        hero_title: 'Trung tâm Khả năng Chống Lũ Los Angeles'
+    },
+    tl: {
+        app_title: 'LA Flood Hub',
+        nav_zones: 'Mga Lugar na Mapanganib',
+        nav_modules: 'Mga Modyul',
+        nav_equipment: 'Kagamitan',
+        nav_data: 'Data',
+        nav_community: 'Komunidad',
+        search_placeholder: 'Maghanap...',
+        hero_title: 'Los Angeles Flood Resilience Hub'
+    },
+    fa: {
+        app_title: 'مرکز سیل LA',
+        nav_zones: 'مناطق خطر',
+        nav_modules: 'ماژول‌ها',
+        nav_equipment: 'تجهیزات',
+        nav_data: 'داده‌ها',
+        nav_community: 'جامعه',
+        search_placeholder: 'جستجو...',
+        hero_title: 'مرکز تاب‌آوری سیل لس‌آنجلس'
+    },
+    ar: {
+        app_title: 'مركز الفيضانات LA',
+        nav_zones: 'مناطق الخطر',
+        nav_modules: 'الوحدات',
+        nav_equipment: 'المعدات',
+        nav_data: 'البيانات',
+        nav_community: 'المجتمع',
+        search_placeholder: 'بحث...',
+        hero_title: 'مركز مرونة الفيضانات في لوس أنجلوس'
+    },
+    hi: {
+        app_title: 'LA बाढ़ हब',
+        nav_zones: 'जोखिम क्षेत्र',
+        nav_modules: 'मॉड्यूल',
+        nav_equipment: 'उपकरण',
+        nav_data: 'डेटा',
+        nav_community: 'समुदाय',
+        search_placeholder: 'खोजें...',
+        hero_title: 'लॉस एंजिल्स बाढ़ लचीलापन केंद्र'
+    },
+    ru: {
+        app_title: 'Центр наводнений LA',
+        nav_zones: 'Зоны риска',
+        nav_modules: 'Модули',
+        nav_equipment: 'Оборудование',
+        nav_data: 'Данные',
+        nav_community: 'Сообщество',
+        search_placeholder: 'Поиск...',
+        hero_title: 'Центр устойчивости к наводнениям Лос-Анджелеса'
+    },
+    fr: {
+        app_title: 'Hub Inondations LA',
+        nav_zones: 'Zones à risque',
+        nav_modules: 'Modules',
+        nav_equipment: 'Équipement',
+        nav_data: 'Données',
+        nav_community: 'Communauté',
+        search_placeholder: 'Rechercher...',
+        hero_title: 'Hub de Résilience aux Inondations de Los Angeles'
+    },
+    de: {
+        app_title: 'LA Hochwasser-Hub',
+        nav_zones: 'Risikozonen',
+        nav_modules: 'Module',
+        nav_equipment: 'Ausrüstung',
+        nav_data: 'Daten',
+        nav_community: 'Gemeinschaft',
+        search_placeholder: 'Suchen...',
+        hero_title: 'Los Angeles Hochwasser-Resilienz-Hub'
+    },
+    pt: {
+        app_title: 'Hub de Inundações LA',
+        nav_zones: 'Zonas de Risco',
+        nav_modules: 'Módulos',
+        nav_equipment: 'Equipamento',
+        nav_data: 'Dados',
+        nav_community: 'Comunidade',
+        search_placeholder: 'Pesquisar...',
+        hero_title: 'Hub de Resiliência a Inundações de Los Angeles'
+    },
+    it: {
+        app_title: 'Hub Alluvioni LA',
+        nav_zones: 'Zone a Rischio',
+        nav_modules: 'Moduli',
+        nav_equipment: 'Attrezzature',
+        nav_data: 'Dati',
+        nav_community: 'Comunità',
+        search_placeholder: 'Cerca...',
+        hero_title: 'Hub di Resilienza alle Alluvioni di Los Angeles'
+    },
+    nl: {
+        app_title: 'LA Overstromingshub',
+        nav_zones: 'Risicozones',
+        nav_modules: 'Modules',
+        nav_equipment: 'Apparatuur',
+        nav_data: 'Gegevens',
+        nav_community: 'Gemeenschap',
+        search_placeholder: 'Zoeken...',
+        hero_title: 'Los Angeles Overstromingsbestendigheids-Hub'
+    },
+    pl: {
+        app_title: 'Centrum Powodziowe LA',
+        nav_zones: 'Strefy Ryzyka',
+        nav_modules: 'Moduły',
+        nav_equipment: 'Sprzęt',
+        nav_data: 'Dane',
+        nav_community: 'Społeczność',
+        search_placeholder: 'Szukaj...',
+        hero_title: 'Centrum Odporności na Powodzie Los Angeles'
+    },
+    uk: {
+        app_title: 'Центр повеней LA',
+        nav_zones: 'Зони ризику',
+        nav_modules: 'Модулі',
+        nav_equipment: 'Обладнання',
+        nav_data: 'Дані',
+        nav_community: 'Спільнота',
+        search_placeholder: 'Пошук...',
+        hero_title: 'Центр стійкості до повеней Лос-Анджелеса'
+    },
+    th: {
+        app_title: 'ศูนย์น้ำท่วม LA',
+        nav_zones: 'พื้นที่เสี่ยง',
+        nav_modules: 'โมดูล',
+        nav_equipment: 'อุปกรณ์',
+        nav_data: 'ข้อมูล',
+        nav_community: 'ชุมชน',
+        search_placeholder: 'ค้นหา...',
+        hero_title: 'ศูนย์ความยืดหยุ่นต่อน้ำท่วมลอสแองเจลิส'
+    },
+    id: {
+        app_title: 'Pusat Banjir LA',
+        nav_zones: 'Zona Risiko',
+        nav_modules: 'Modul',
+        nav_equipment: 'Peralatan',
+        nav_data: 'Data',
+        nav_community: 'Komunitas',
+        search_placeholder: 'Cari...',
+        hero_title: 'Pusat Ketahanan Banjir Los Angeles'
+    },
+    ms: {
+        app_title: 'Hab Banjir LA',
+        nav_zones: 'Zon Risiko',
+        nav_modules: 'Modul',
+        nav_equipment: 'Peralatan',
+        nav_data: 'Data',
+        nav_community: 'Komuniti',
+        search_placeholder: 'Cari...',
+        hero_title: 'Hab Ketahanan Banjir Los Angeles'
+    },
+    tr: {
+        app_title: 'LA Sel Merkezi',
+        nav_zones: 'Risk Bölgeleri',
+        nav_modules: 'Modüller',
+        nav_equipment: 'Ekipman',
+        nav_data: 'Veri',
+        nav_community: 'Topluluk',
+        search_placeholder: 'Ara...',
+        hero_title: 'Los Angeles Sel Dayanıklılık Merkezi'
+    },
+    he: {
+        app_title: 'מרכז שיטפונות LA',
+        nav_zones: 'אזורי סיכון',
+        nav_modules: 'מודולים',
+        nav_equipment: 'ציוד',
+        nav_data: 'נתונים',
+        nav_community: 'קהילה',
+        search_placeholder: 'חיפוש...',
+        hero_title: 'מרכז חוסן שיטפונות לוס אנג\'לס'
+    }
+};
+
+const LANGUAGE_NAMES = {
+    en: 'English',
+    es: 'Español',
+    zh: '中文',
+    ja: '日本語',
+    ko: '한국어',
+    vi: 'Tiếng Việt',
+    tl: 'Tagalog',
+    fa: 'فارسی',
+    ar: 'العربية',
+    hi: 'हिन्दी',
+    ru: 'Русский',
+    fr: 'Français',
+    de: 'Deutsch',
+    pt: 'Português',
+    it: 'Italiano',
+    nl: 'Nederlands',
+    pl: 'Polski',
+    uk: 'Українська',
+    th: 'ไทย',
+    id: 'Bahasa Indonesia',
+    ms: 'Bahasa Melayu',
+    tr: 'Türkçe',
+    he: 'עברית'
+};
+
+/* ============================================================================
+   INDEXEDDB MANAGER
+   Purpose: Offline-first data persistence
+   Extend: Add new object stores in initDB()
+   Expected: All user data stored locally, persists across sessions
+============================================================================ */
+class DatabaseManager {
+    constructor() {
+        this.db = null;
+    }
+
+    async init() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(CONFIG.DB_NAME, CONFIG.DB_VERSION);
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                this.db = request.result;
+                resolve(this.db);
+            };
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                // Settings store for language, theme, etc.
+                if (!db.objectStoreNames.contains(CONFIG.STORES.settings)) {
+                    db.createObjectStore(CONFIG.STORES.settings, { keyPath: 'key' });
+                }
+                
+                // HUD data store
+                if (!db.objectStoreNames.contains(CONFIG.STORES.hudData)) {
+                    db.createObjectStore(CONFIG.STORES.hudData, { keyPath: 'id' });
+                }
+                
+                // Search index store
+                if (!db.objectStoreNames.contains(CONFIG.STORES.searchIndex)) {
+                    const searchStore = db.createObjectStore(CONFIG.STORES.searchIndex, { keyPath: 'id', autoIncrement: true });
+                    searchStore.createIndex('keywords', 'keywords', { multiEntry: true });
+                }
+                
+                // User choices store
+                if (!db.objectStoreNames.contains(CONFIG.STORES.userChoices)) {
+                    db.createObjectStore(CONFIG.STORES.userChoices, { keyPath: 'id' });
+                }
+            };
+        });
+    }
+
+    async get(storeName, key) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(storeName, 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.get(key);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async set(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(storeName, 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.put(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async getAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(storeName, 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async clear(storeName) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(storeName, 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.clear();
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+}
+
+/* ============================================================================
+   APPLICATION STATE
+   Purpose: Centralized state management
+   Extend: Add new state properties as needed
+============================================================================ */
+const AppState = {
+    db: null,
+    currentLang: CONFIG.DEFAULT_LANG,
+    theme: 'light',
+    hudData: {
+        coverage: 78,
+        readiness: 65,
+        impact: 82
+    },
+    searchIndex: [],
+    initialized: false
+};
+
+/* ============================================================================
+   TRANSLATION MANAGER
+   Purpose: Handles all translation operations
+   Extend: Add new translation methods as needed
+============================================================================ */
+const TranslationManager = {
+    setLanguage(lang) {
+        if (!TRANSLATIONS[lang]) {
+            console.warn(`Language ${lang} not found, falling back to English`);
+            lang = 'en';
+        }
+        
+        AppState.currentLang = lang;
+        document.documentElement.lang = lang;
+        
+        // Handle RTL languages
+        const rtlLangs = ['ar', 'fa', 'he'];
+        document.documentElement.dir = rtlLangs.includes(lang) ? 'rtl' : 'ltr';
+        
+        this.applyTranslations();
+        this.saveLanguagePreference(lang);
+    },
+
+    applyTranslations() {
+        const elements = document.querySelectorAll('[data-translate]');
+        elements.forEach(el => {
+            const key = el.dataset.translate;
+            const translation = this.getTranslation(key);
+            if (translation) {
+                el.innerHTML = translation;
+            }
+        });
+
+        // Handle placeholder translations
+        const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+        placeholderElements.forEach(el => {
+            const key = el.dataset.translatePlaceholder;
+            const translation = this.getTranslation(key);
+            if (translation) {
+                el.placeholder = translation;
+            }
+        });
+    },
+
+    getTranslation(key) {
+        const langData = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
+        return langData[key] || TRANSLATIONS.en[key] || key;
+    },
+
+    async saveLanguagePreference(lang) {
+        if (AppState.db) {
+            await AppState.db.set(CONFIG.STORES.settings, { key: 'language', value: lang });
+        }
+    },
+
+    async loadLanguagePreference() {
+        if (AppState.db) {
+            const setting = await AppState.db.get(CONFIG.STORES.settings, 'language');
+            return setting?.value || CONFIG.DEFAULT_LANG;
+        }
+        return CONFIG.DEFAULT_LANG;
+    }
+};
+
+/* ============================================================================
+   THEME MANAGER
+   Purpose: Handles dark/light theme switching
+============================================================================ */
+const ThemeManager = {
+    setTheme(theme) {
+        AppState.theme = theme;
+        document.documentElement.dataset.theme = theme;
+        this.saveThemePreference(theme);
+        this.updateThemeIcon();
+    },
+
+    toggle() {
+        const newTheme = AppState.theme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+    },
+
+    updateThemeIcon() {
+        const btn = document.getElementById('themeBtn');
+        if (btn) {
+            const icon = AppState.theme === 'light' 
+                ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+                : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+            btn.innerHTML = icon;
+        }
+    },
+
+    async saveThemePreference(theme) {
+        if (AppState.db) {
+            await AppState.db.set(CONFIG.STORES.settings, { key: 'theme', value: theme });
+        }
+    },
+
+    async loadThemePreference() {
+        if (AppState.db) {
+            const setting = await AppState.db.get(CONFIG.STORES.settings, 'theme');
+            return setting?.value || 'light';
+        }
+        return 'light';
+    }
+};
+
+/* ============================================================================
+   HUD MANAGER
+   Purpose: Manages the gamification HUD display and data
+============================================================================ */
+const HUDManager = {
+    update(data) {
+        Object.assign(AppState.hudData, data);
+        this.render();
+        this.saveHUDData();
+    },
+
+    render() {
+        const { coverage, readiness, impact } = AppState.hudData;
+        
+        const coverageEl = document.getElementById('hudCoverage');
+        const coverageBar = document.getElementById('hudCoverageBar');
+        const readinessEl = document.getElementById('hudReadiness');
+        const readinessBar = document.getElementById('hudReadinessBar');
+        const impactEl = document.getElementById('hudImpact');
+        const impactBar = document.getElementById('hudImpactBar');
+
+        if (coverageEl) coverageEl.textContent = `${coverage}%`;
+        if (coverageBar) coverageBar.style.width = `${coverage}%`;
+        if (readinessEl) readinessEl.textContent = `${readiness}%`;
+        if (readinessBar) readinessBar.style.width = `${readiness}%`;
+        if (impactEl) impactEl.textContent = `${impact}%`;
+        if (impactBar) impactBar.style.width = `${impact}%`;
+    },
+
+    async saveHUDData() {
+        if (AppState.db) {
+            await AppState.db.set(CONFIG.STORES.hudData, { id: 'main', ...AppState.hudData });
+        }
+    },
+
+    async loadHUDData() {
+        if (AppState.db) {
+            const data = await AppState.db.get(CONFIG.STORES.hudData, 'main');
+            if (data) {
+                Object.assign(AppState.hudData, data);
+            }
+        }
+    }
+};
+
+/* ============================================================================
+   CONSTELLATION VISUALIZER
+   Purpose: Renders the constellation-style state graph
+============================================================================ */
+const ConstellationVisualizer = {
+    canvas: null,
+    ctx: null,
+    nodes: [],
+    animationId: null,
+
+    init() {
+        this.canvas = document.getElementById('constellationCanvas');
+        if (!this.canvas) return;
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        this.createNodes();
+        this.animate();
+        
+        window.addEventListener('resize', () => this.resize());
+    },
+
+    resize() {
+        const container = this.canvas.parentElement;
+        this.canvas.width = container.clientWidth;
+        this.canvas.height = container.clientHeight;
+    },
+
+    createNodes() {
+        const modules = ['Hub', 'Zones', 'Quick', 'Altitude', 'Debris', 'Community'];
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+        const radius = Math.min(centerX, centerY) * 0.6;
+        
+        this.nodes = modules.map((name, i) => {
+            const angle = (i / modules.length) * Math.PI * 2 - Math.PI / 2;
+            return {
+                name,
+                x: centerX + Math.cos(angle) * radius,
+                y: centerY + Math.sin(angle) * radius,
+                baseX: centerX + Math.cos(angle) * radius,
+                baseY: centerY + Math.sin(angle) * radius,
+                radius: i === 0 ? 8 : 5,
+                active: true,
+                pulse: Math.random() * Math.PI * 2
+            };
+        });
+        
+        // Add center node
+        this.nodes.unshift({
+            name: 'Core',
+            x: centerX,
+            y: centerY,
+            baseX: centerX,
+            baseY: centerY,
+            radius: 10,
+            active: true,
+            pulse: 0
+        });
+    },
+
+    animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        const isDark = AppState.theme === 'dark';
+        const lineColor = isDark ? 'rgba(100, 150, 200, 0.3)' : 'rgba(41, 128, 185, 0.3)';
+        const nodeColor = isDark ? '#5dade2' : '#2980b9';
+        const glowColor = isDark ? 'rgba(93, 173, 226, 0.5)' : 'rgba(41, 128, 185, 0.5)';
+        
+        // Draw connections
+        this.ctx.strokeStyle = lineColor;
+        this.ctx.lineWidth = 1;
+        
+        for (let i = 1; i < this.nodes.length; i++) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.nodes[0].x, this.nodes[0].y);
+            this.ctx.lineTo(this.nodes[i].x, this.nodes[i].y);
+            this.ctx.stroke();
+        }
+        
+        // Draw nodes
+        const time = Date.now() / 1000;
+        this.nodes.forEach((node, i) => {
+            // Gentle floating animation
+            node.x = node.baseX + Math.sin(time + node.pulse) * 2;
+            node.y = node.baseY + Math.cos(time + node.pulse) * 2;
+            
+            // Glow effect
+            const gradient = this.ctx.createRadialGradient(
+                node.x, node.y, 0,
+                node.x, node.y, node.radius * 2
+            );
+            gradient.addColorStop(0, glowColor);
+            gradient.addColorStop(1, 'transparent');
+            
+            this.ctx.beginPath();
+            this.ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2);
+            this.ctx.fillStyle = gradient;
+            this.ctx.fill();
+            
+            // Node
+            this.ctx.beginPath();
+            this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = nodeColor;
+            this.ctx.fill();
+        });
+        
+        this.animationId = requestAnimationFrame(() => this.animate());
+    },
+
+    destroy() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+    }
+};
+
+/* ============================================================================
+   SEARCH MANAGER
+   Purpose: Client-side full-text search
+============================================================================ */
+const SearchManager = {
+    index: [],
+    debounceTimer: null,
+
+    init() {
+        this.buildIndex();
+        this.setupListeners();
+    },
+
+    buildIndex() {
+        // Build search index from page content
+        const searchable = document.querySelectorAll('[data-translate], .zone-card-title, .module-title, .equipment-name, .zone-description, .module-description');
+        
+        this.index = Array.from(searchable).map((el, id) => {
+            const text = el.textContent.toLowerCase();
+            const section = el.closest('section')?.id || 'main';
+            const title = el.closest('.zone-card, .module-card, .collapsible')?.querySelector('.zone-card-title, .module-title, .collapsible-title')?.textContent || text.substring(0, 50);
+            
+            return {
+                id,
+                text,
+                title,
+                section,
+                element: el
+            };
+        });
+    },
+
+    search(query) {
+        if (!query || query.length < 2) return [];
+        
+        const terms = query.toLowerCase().split(/\s+/);
+        
+        return this.index
+            .filter(item => terms.every(term => item.text.includes(term)))
+            .slice(0, 10)
+            .map(item => ({
+                title: item.title,
+                section: item.section,
+                element: item.element
+            }));
+    },
+
+    setupListeners() {
+        const input = document.getElementById('searchInput');
+        const results = document.getElementById('searchResults');
+        
+        if (!input || !results) return;
+
+        input.addEventListener('input', (e) => {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => {
+                const query = e.target.value.trim();
+                const matches = this.search(query);
+                this.renderResults(matches, results);
+            }, CONFIG.SEARCH_DEBOUNCE);
+        });
+
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2) {
+                results.classList.add('active');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                results.classList.remove('active');
+            }
+        });
+    },
+
+    renderResults(matches, container) {
+        if (matches.length === 0) {
+            container.classList.remove('active');
+            return;
+        }
+
+        container.innerHTML = matches.map(match => `
+            <div class="search-result-item" data-section="${match.section}">
+                <strong>${this.escapeHtml(match.title.substring(0, 60))}</strong>
+                <small style="display: block; color: var(--text-muted);">${match.section}</small>
+            </div>
+        `).join('');
+
+        container.classList.add('active');
+
+        // Add click handlers
+        container.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                const target = document.getElementById(section);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                container.classList.remove('active');
+                document.getElementById('searchInput').value = '';
+            });
+        });
+    },
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+};
+
+/* ============================================================================
+   COLLAPSIBLE MANAGER
+   Purpose: Handles collapsible section interactions
+============================================================================ */
+const CollapsibleManager = {
+    init() {
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => this.toggle(header));
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggle(header);
+                }
+            });
+        });
+    },
+
+    toggle(header) {
+        const collapsible = header.closest('.collapsible');
+        const isOpen = collapsible.classList.contains('open');
+        
+        collapsible.classList.toggle('open');
+        header.setAttribute('aria-expanded', !isOpen);
+        
+        // Track interaction for HUD
+        if (!isOpen) {
+            const currentReadiness = AppState.hudData.readiness;
+            HUDManager.update({ readiness: Math.min(100, currentReadiness + 1) });
+        }
+    }
+};
+
+/* ============================================================================
+   NAVIGATION MANAGER
+   Purpose: Handles navigation highlighting and scroll behavior
+============================================================================ */
+const NavigationManager = {
+    init() {
+        this.setupScrollSpy();
+        this.setupSmoothScroll();
+    },
+
+    setupScrollSpy() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${entry.target.id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        sections.forEach(section => observer.observe(section));
+    },
+
+    setupSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    }
+};
+
+/* ============================================================================
+   LANGUAGE MENU MANAGER
+   Purpose: Renders and handles language selection dropdown
+============================================================================ */
+const LanguageMenuManager = {
+    init() {
+        this.render();
+        this.setupListeners();
+    },
+
+    render() {
+        const menu = document.getElementById('langMenu');
+        if (!menu) return;
+
+        menu.innerHTML = Object.entries(LANGUAGE_NAMES).map(([code, name]) => `
+            <div class="lang-option ${code === AppState.currentLang ? 'selected' : ''}" data-lang="${code}">
+                <span>${name}</span>
+            </div>
+        `).join('');
+    },
+
+    setupListeners() {
+        const btn = document.getElementById('langBtn');
+        const menu = document.getElementById('langMenu');
+        
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('active');
+        });
+
+        menu.addEventListener('click', (e) => {
+            const option = e.target.closest('.lang-option');
+            if (option) {
+                const lang = option.dataset.lang;
+                TranslationManager.setLanguage(lang);
+                this.render();
+                menu.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('click', () => {
+            menu.classList.remove('active');
+        });
+    }
+};
+
+/* ============================================================================
+   HUD TOGGLE MANAGER
+   Purpose: Handles HUD minimize/maximize
+============================================================================ */
+const HUDToggleManager = {
+    init() {
+        const header = document.getElementById('hudHeader');
+        const container = document.getElementById('hudContainer');
+        
+        if (!header || !container) return;
+
+        header.addEventListener('click', () => {
+            container.classList.toggle('minimized');
+            const isMinimized = container.classList.contains('minimized');
+            header.setAttribute('aria-expanded', !isMinimized);
+        });
+
+        header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                container.classList.toggle('minimized');
+            }
+        });
+    }
+};
+
+/* ============================================================================
+   SPLASH SCREEN MANAGER
+   Purpose: Controls splash screen display and initialization progress
+============================================================================ */
+const SplashManager = {
+    progress: 0,
+    steps: [
+        'Initializing database...',
+        'Loading preferences...',
+        'Building search index...',
+        'Preparing translations...',
+        'Loading HUD data...',
+        'Ready!'
+    ],
+
+    updateProgress(step, progress) {
+        const progressBar = document.getElementById('splashProgress');
+        const status = document.getElementById('splashStatus');
+        
+        if (progressBar) progressBar.style.width = `${progress}%`;
+        if (status) status.textContent = this.steps[step] || 'Loading...';
+    },
+
+    hide() {
+        const splash = document.getElementById('splashScreen');
+        if (splash) {
+            splash.classList.add('hidden');
+        }
+    }
+};
+
+/* ============================================================================
+   INPUT SANITIZATION
+   Purpose: Prevent XSS and malicious input
+   Note: All user input should pass through this
+============================================================================ */
+const Sanitizer = {
+    sanitize(input) {
+        if (typeof input !== 'string') return '';
+        return input
+            .replace(/[<>]/g, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+=/gi, '')
+            .trim()
+            .substring(0, 1000); // Rate limit: max 1000 chars
+    }
+};
+
+/* ============================================================================
+   INITIALIZATION
+   Purpose: Bootstrap the application
+============================================================================ */
+async function initializeApp() {
+    const startTime = Date.now();
+    
+    try {
+        // Step 1: Initialize IndexedDB
+        SplashManager.updateProgress(0, 10);
+        AppState.db = new DatabaseManager();
+        await AppState.db.init();
+        
+        // Step 2: Load preferences
+        SplashManager.updateProgress(1, 30);
+        const savedLang = await TranslationManager.loadLanguagePreference();
+        const savedTheme = await ThemeManager.loadThemePreference();
+        
+        // Step 3: Build search index
+        SplashManager.updateProgress(2, 50);
+        SearchManager.init();
+        
+        // Step 4: Apply translations
+        SplashManager.updateProgress(3, 70);
+        TranslationManager.setLanguage(savedLang);
+        
+        // Step 5: Load HUD data
+        SplashManager.updateProgress(4, 85);
+        await HUDManager.loadHUDData();
+        HUDManager.render();
+        
+        // Step 6: Initialize UI components
+        SplashManager.updateProgress(5, 100);
+        ThemeManager.setTheme(savedTheme);
+        CollapsibleManager.init();
+        NavigationManager.init();
+        LanguageMenuManager.init();
+        HUDToggleManager.init();
+        ConstellationVisualizer.init();
+        
+        // Theme toggle listener
+        document.getElementById('themeBtn')?.addEventListener('click', () => ThemeManager.toggle());
+        
+        AppState.initialized = true;
+        
+        // Ensure minimum splash time for smooth UX
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, CONFIG.SPLASH_MIN_TIME - elapsed);
+        
+        setTimeout(() => {
+            SplashManager.hide();
+        }, remaining);
+        
+    } catch (error) {
+        console.error('Initialization error:', error);
+        // Still hide splash and show content even if there's an error
+        SplashManager.hide();
+    }
+}
+
+// Start the app when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
+
+/* ============================================================================
+   SERVICE WORKER REGISTRATION (Optional Offline Enhancement)
+   Purpose: Enable full offline capability via service worker
+   Note: Requires separate sw.js file for complete implementation
+============================================================================ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        // Service worker would be registered here for full PWA support
+        // navigator.serviceWorker.register('/sw.js');
+    });
+}
+    </script>
+</body>
+</html>

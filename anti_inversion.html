@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  LA FLOOD RESILIENCE HUB - Anti-Inversion Safeguards                          ║
+║  Preventing misuse and ensuring transparent data flows                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Inversion Guide | LA Flood Hub</title>
+    <style>
+:root {
+    --primary-600: #2980b9; --primary-50: #ebf5fb;
+    --danger-500: #e74c3c; --danger-100: #fadbd8;
+    --warning-500: #f39c12;
+    --success-500: #27ae60;
+    --neutral-900: #1a1a2e; --neutral-600: #34495e; --neutral-400: #85929e;
+    --neutral-200: #d5d8dc; --neutral-100: #eaecee; --neutral-50: #f8f9f9;
+    --bg-primary: var(--neutral-50); --bg-secondary: #ffffff;
+    --text-primary: var(--neutral-900); --text-secondary: var(--neutral-600);
+    --border-color: var(--neutral-200);
+    --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --header-height: 70px; --border-radius: 8px; --border-radius-lg: 12px;
+    --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
+    --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem;
+}
+[data-theme="dark"] { --bg-primary: var(--neutral-900); --bg-secondary: #16213e; --text-primary: #f8f9f9; --text-secondary: #aab7b8; --border-color: #2c3e50; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); line-height: 1.7; color: var(--text-primary); background: var(--bg-primary); }
+
+.header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 var(--space-6); z-index: 100; }
+.back-link { display: flex; align-items: center; gap: var(--space-2); color: var(--primary-600); text-decoration: none; font-weight: 500; }
+.header-title { margin-left: var(--space-6); font-family: var(--font-display); font-size: 1.25rem; }
+
+.main-content { margin-top: var(--header-height); padding: var(--space-8) var(--space-6); max-width: 800px; margin-left: auto; margin-right: auto; }
+.page-header { text-align: center; margin-bottom: var(--space-12); }
+.page-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: var(--space-4); }
+.page-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+/* Warning Box */
+.warning-box { background: var(--danger-100); border-left: 4px solid var(--danger-500); padding: var(--space-5); border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: var(--space-6) 0; }
+.warning-box h3 { color: var(--danger-500); margin-bottom: var(--space-2); }
+
+/* Section Cards */
+.section-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); }
+.section-card h2 { font-size: 1.25rem; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-3); }
+.section-card p { color: var(--text-secondary); margin-bottom: var(--space-4); }
+
+/* Safeguard List */
+.safeguard-list { list-style: none; }
+.safeguard-list li { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--border-color); }
+.safeguard-list li:last-child { border-bottom: none; }
+.safeguard-icon { font-size: 1.25rem; flex-shrink: 0; }
+.safeguard-text strong { display: block; color: var(--text-primary); }
+.safeguard-text span { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* Code Block */
+.code-block { background: var(--neutral-900); color: #82e0aa; padding: var(--space-4); border-radius: var(--border-radius); font-family: monospace; font-size: 0.875rem; overflow-x: auto; margin: var(--space-4) 0; }
+
+.module-footer { margin-top: var(--space-16); padding: var(--space-6); background: var(--neutral-900); color: var(--neutral-400); border-radius: var(--border-radius-lg); font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Hub
+        </a>
+        <h1 class="header-title">Anti-Inversion Safeguards</h1>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Anti-Inversion Safeguards</h1>
+            <p class="page-subtitle">
+                Technical and design measures preventing this tool from being repurposed for surveillance, 
+                coercion, or harm.
+            </p>
+        </div>
+
+        <div class="warning-box">
+            <h3>What is "Inversion"?</h3>
+            <p style="margin: 0;">Inversion occurs when tools designed for public benefit are repurposed for surveillance, control, or harm. This document explains safeguards preventing such misuse of the LA Flood Resilience Hub.</p>
+        </div>
+
+        <div class="section-card">
+            <h2>🔐 Data Flow Transparency</h2>
+            <p>All data flows in this application are one-way: from the application to the user. There is no reverse flow of user data to any server.</p>
+            <ul class="safeguard-list">
+                <li>
+                    <span class="safeguard-icon">📥</span>
+                    <div class="safeguard-text">
+                        <strong>No Outbound Data</strong>
+                        <span>Application makes zero network requests after initial page load. Verify in browser DevTools → Network tab.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">💾</span>
+                    <div class="safeguard-text">
+                        <strong>IndexedDB Only</strong>
+                        <span>All storage is local IndexedDB. No cookies, no localStorage tokens sent anywhere.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">🔍</span>
+                    <div class="safeguard-text">
+                        <strong>Source Code Auditable</strong>
+                        <span>All JavaScript is inline and readable. No minification hiding functionality.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <h2>🚫 Features Explicitly Excluded</h2>
+            <p>The following features were deliberately NOT included to prevent misuse:</p>
+            <ul class="safeguard-list">
+                <li>
+                    <span class="safeguard-icon">❌</span>
+                    <div class="safeguard-text">
+                        <strong>No User Accounts</strong>
+                        <span>No login, registration, or identity verification. Information is freely accessible.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">❌</span>
+                    <div class="safeguard-text">
+                        <strong>No Location Tracking</strong>
+                        <span>Application never requests geolocation API access.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">❌</span>
+                    <div class="safeguard-text">
+                        <strong>No User Behavior Analytics</strong>
+                        <span>No click tracking, scroll tracking, or session recording.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">❌</span>
+                    <div class="safeguard-text">
+                        <strong>No Social Media Integration</strong>
+                        <span>No share buttons, embeds, or social tracking pixels.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">❌</span>
+                    <div class="safeguard-text">
+                        <strong>No Third-Party Scripts</strong>
+                        <span>No Google Analytics, Facebook Pixel, or any external JavaScript.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <h2>🛡️ Input Sanitization</h2>
+            <p>All user input is sanitized to prevent injection attacks and rate-limited to prevent abuse:</p>
+            <div class="code-block">
+// Input sanitization example from source code
+const Sanitizer = {
+    sanitize(input) {
+        if (typeof input !== 'string') return '';
+        return input
+            .replace(/[&lt;&gt;]/g, '')        // Remove HTML brackets
+            .replace(/javascript:/gi, '')  // Remove JS protocol
+            .replace(/on\\w+=/gi, '')      // Remove event handlers
+            .trim()
+            .substring(0, 1000);           // Rate limit: max 1000 chars
+    }
+};</div>
+        </div>
+
+        <div class="section-card">
+            <h2>⚖️ Barrier Placement Ethics</h2>
+            <p>Equipment deployment guidance includes "No Adverse Impact" principles:</p>
+            <ul class="safeguard-list">
+                <li>
+                    <span class="safeguard-icon">⚠️</span>
+                    <div class="safeguard-text">
+                        <strong>Neighbor Awareness</strong>
+                        <span>Guidance warns against redirecting water onto neighboring properties without coordination.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">⚠️</span>
+                    <div class="safeguard-text">
+                        <strong>Professional Supervision</strong>
+                        <span>Heavy equipment guidance recommends trained operator supervision.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">⚠️</span>
+                    <div class="safeguard-text">
+                        <strong>Environmental Protection</strong>
+                        <span>Runoff filtration and contamination prevention included in protocols.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <h2>🔄 User Data Control</h2>
+            <p>Users maintain complete control over any locally stored data:</p>
+            <ul class="safeguard-list">
+                <li>
+                    <span class="safeguard-icon">🗑️</span>
+                    <div class="safeguard-text">
+                        <strong>Clear All Data</strong>
+                        <span>Browser Settings → Clear Site Data removes all application storage.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">🔒</span>
+                    <div class="safeguard-text">
+                        <strong>Private Browsing</strong>
+                        <span>Application works in private/incognito mode with no persistent storage.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="safeguard-icon">📴</span>
+                    <div class="safeguard-text">
+                        <strong>Offline Operation</strong>
+                        <span>Full functionality without internet after initial load—no connectivity required.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <footer class="module-footer">
+            <strong style="color: #27ae60;">Verification:</strong> All claims in this document can be verified 
+            by examining the source code directly. Open browser DevTools (F12) → Sources tab to review all 
+            JavaScript. Network tab confirms zero outbound requests after page load.
+        </footer>
+    </main>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+</body>
+</html>
